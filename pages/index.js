@@ -2,12 +2,11 @@ import Image from "next/image";
 import { Inter } from "next/font/google";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useState } from "react";
-
-const inter = Inter({ subsets: ["latin"] });
+import { useRouter } from "next/router";
 
 export default function Home() {
+  const router = useRouter();
   const session = useSession();
-  console.log(session);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -16,6 +15,7 @@ export default function Home() {
       alert("Fill the fields");
       return;
     }
+
     let response = await signIn("credentials", {
       email,
       password,
@@ -25,7 +25,7 @@ export default function Home() {
     if (response.error) {
       alert("something went wrong");
     } else {
-      window.location.reload();
+      router.push("/redirect?url=/inventory");
     }
   };
 

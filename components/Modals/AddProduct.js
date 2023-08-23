@@ -2,12 +2,23 @@
 import React, { useEffect } from "react";
 
 function AddProduct({ open, setOpen }) {
+  const [name, setName] = React.useState("");
+  const [modelNumber, setModelNumber] = React.useState("");
+  const [rawImages, setRawImages] = React.useState([]);
+  const [videoLinks, setVideoLinks] = React.useState([]);
+  const [downloadInfoFiles, setDownloadInfoFiles] = React.useState([]);
+  const [collection, setCollection] = React.useState([]);
   const [description, setDescription] = React.useState("");
+
   const descriptionRef = React.useRef();
 
   useEffect(() => {
     const descriptionInput = document.getElementById("description");
     descriptionInput?.addEventListener("keydown", (e) => {
+      if (e.key === "Shift") {
+        e.preventDefault();
+        setDescription((prev) => prev + "• ");
+      }
       if (e.key === "Enter") {
         e.preventDefault();
         setDescription((prev) => prev + "\n• ");
