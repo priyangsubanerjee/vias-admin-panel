@@ -1,31 +1,45 @@
+import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 
 function SideLayout({ children }) {
+  const router = useRouter();
   return (
     <div className="min-h-screen fixed inset-0 h-full w-full overflow-hidden flex">
-      <div className="h-screen w-[500px] overflow-auto bg-white px-[50px] py-[70px] relative">
+      <div className="h-screen w-[450px] overflow-auto bg-white px-[50px] py-[70px] relative">
         <h1 className="text-2xl font-semibold text-[#023E8A]">VIAS Cabinet</h1>
         <p className="text-[#777777] tracking-[1.28px] text-sm mt-10">
           GENERAL
         </p>
         <ul className="mt-7 space-y-2">
-          <li className="flex items-center space-x-4 bg-[#023E8A] text-white px-4 py-3 rounded-lg text-sm">
-            <span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
+          <Link href={"/inventory"}>
+            <li
+              style={{
+                background: router.pathname === "/inventory" && "#023E8A",
+                color: router.pathname === "/inventory" ? "white" : "black",
+              }}
+              className="flex items-center space-x-4  px-4 py-3 rounded-lg text-sm"
+            >
+              <span
+                style={{
+                  color: router.pathname === "/inventory" ? "" : "black",
+                }}
               >
-                <path
-                  d="M5 22C4.45 22 3.979 21.804 3.587 21.412C3.195 21.02 2.99933 20.5493 3 20V8.725C2.7 8.54167 2.45833 8.304 2.275 8.012C2.09167 7.72 2 7.38267 2 7V4C2 3.45 2.196 2.979 2.588 2.587C2.98 2.195 3.45067 1.99934 4 2H20C20.55 2 21.021 2.196 21.413 2.588C21.805 2.98 22.0007 3.45067 22 4V7C22 7.38334 21.9083 7.72067 21.725 8.012C21.5417 8.30334 21.3 8.541 21 8.725V20C21 20.55 20.804 21.021 20.412 21.413C20.02 21.805 19.5493 22.0007 19 22H5ZM4 7H20V4H4V7ZM10 14H14C14.2833 14 14.521 13.904 14.713 13.712C14.905 13.52 15.0007 13.2827 15 13C15 12.7167 14.904 12.479 14.712 12.287C14.52 12.095 14.2827 11.9993 14 12H10C9.71667 12 9.479 12.096 9.287 12.288C9.095 12.48 8.99933 12.7173 9 13C9 13.2833 9.096 13.521 9.288 13.713C9.48 13.905 9.71733 14.0007 10 14Z"
-                  fill="white"
-                />
-              </svg>
-            </span>
-            <span className="">Inventory</span>
-          </li>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M5 22q-.825 0-1.413-.588T3 20V8.725q-.45-.275-.725-.713T2 7V4q0-.825.588-1.413T4 2h16q.825 0 1.413.588T22 4v3q0 .575-.275 1.012T21 8.725V20q0 .825-.588 1.413T19 22H5ZM4 7h16V4H4v3Zm5 7h6v-2H9v2Z"
+                  />
+                </svg>
+              </span>
+              <span className="">Inventory</span>
+            </li>
+          </Link>
           <li className="flex items-center space-x-4 bg-[#023E8A]/0 text-black px-4 py-3 rounded-lg text-sm">
             <span className="text-black">
               <svg
@@ -33,11 +47,10 @@ function SideLayout({ children }) {
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
-                fill="none"
               >
                 <path
                   d="M14.33 20H14.12C13.6968 19.958 13.2979 19.7822 12.9814 19.498C12.6649 19.2139 12.4472 18.8363 12.36 18.42L9.68 6L6.92 12.4C6.84193 12.5789 6.71323 12.731 6.54975 12.8376C6.38627 12.9442 6.19517 13.0007 6 13H3C2.73478 13 2.48043 12.8946 2.29289 12.7071C2.10536 12.5196 2 12.2652 2 12C2 11.7348 2.10536 11.4804 2.29289 11.2929C2.48043 11.1054 2.73478 11 3 11H5.34L7.85 5.21C8.01896 4.82146 8.30695 4.49662 8.67244 4.28231C9.03793 4.068 9.46203 3.97529 9.88361 4.01756C10.3052 4.05983 10.7024 4.23489 11.0181 4.51749C11.3338 4.8001 11.5515 5.17565 11.64 5.59L14.32 18L17.08 11.62C17.155 11.4374 17.2824 11.2811 17.4461 11.1707C17.6099 11.0604 17.8026 11.001 18 11H21C21.2652 11 21.5196 11.1054 21.7071 11.2929C21.8946 11.4804 22 11.7348 22 12C22 12.2652 21.8946 12.5196 21.7071 12.7071C21.5196 12.8946 21.2652 13 21 13H18.66L16.15 18.79C15.9967 19.1465 15.7431 19.4507 15.4199 19.6656C15.0967 19.8804 14.718 19.9966 14.33 20Z"
-                  fill="#1B1B1B"
+                  fill="currentColor"
                 />
               </svg>
             </span>
@@ -60,23 +73,30 @@ function SideLayout({ children }) {
             </span>
             <span className="">Sales</span>
           </li>
-          <li className="flex items-center space-x-4 bg-[#023E8A]/0 text-black px-4 py-3 rounded-lg text-sm">
-            <span className="text-black">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  d="M14.33 20H14.12C13.6968 19.958 13.2979 19.7822 12.9814 19.498C12.6649 19.2139 12.4472 18.8363 12.36 18.42L9.68 6L6.92 12.4C6.84193 12.5789 6.71323 12.731 6.54975 12.8376C6.38627 12.9442 6.19517 13.0007 6 13H3C2.73478 13 2.48043 12.8946 2.29289 12.7071C2.10536 12.5196 2 12.2652 2 12C2 11.7348 2.10536 11.4804 2.29289 11.2929C2.48043 11.1054 2.73478 11 3 11H5.34L7.85 5.21C8.01896 4.82146 8.30695 4.49662 8.67244 4.28231C9.03793 4.068 9.46203 3.97529 9.88361 4.01756C10.3052 4.05983 10.7024 4.23489 11.0181 4.51749C11.3338 4.8001 11.5515 5.17565 11.64 5.59L14.32 18L17.08 11.62C17.155 11.4374 17.2824 11.2811 17.4461 11.1707C17.6099 11.0604 17.8026 11.001 18 11H21C21.2652 11 21.5196 11.1054 21.7071 11.2929C21.8946 11.4804 22 11.7348 22 12C22 12.2652 21.8946 12.5196 21.7071 12.7071C21.5196 12.8946 21.2652 13 21 13H18.66L16.15 18.79C15.9967 19.1465 15.7431 19.4507 15.4199 19.6656C15.0967 19.8804 14.718 19.9966 14.33 20Z"
-                  fill="#1B1B1B"
-                />
-              </svg>
-            </span>
-            <span className="">Customers</span>
-          </li>
+          <Link href={"/customers"}>
+            <li
+              style={{
+                background: router.pathname === "/customers" && "#023E8A",
+                color: router.pathname === "/customers" ? "white" : "black",
+              }}
+              className="flex items-center space-x-4  px-4 py-3 rounded-lg text-sm"
+            >
+              <span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M14.33 20H14.12C13.6968 19.958 13.2979 19.7822 12.9814 19.498C12.6649 19.2139 12.4472 18.8363 12.36 18.42L9.68 6L6.92 12.4C6.84193 12.5789 6.71323 12.731 6.54975 12.8376C6.38627 12.9442 6.19517 13.0007 6 13H3C2.73478 13 2.48043 12.8946 2.29289 12.7071C2.10536 12.5196 2 12.2652 2 12C2 11.7348 2.10536 11.4804 2.29289 11.2929C2.48043 11.1054 2.73478 11 3 11H5.34L7.85 5.21C8.01896 4.82146 8.30695 4.49662 8.67244 4.28231C9.03793 4.068 9.46203 3.97529 9.88361 4.01756C10.3052 4.05983 10.7024 4.23489 11.0181 4.51749C11.3338 4.8001 11.5515 5.17565 11.64 5.59L14.32 18L17.08 11.62C17.155 11.4374 17.2824 11.2811 17.4461 11.1707C17.6099 11.0604 17.8026 11.001 18 11H21C21.2652 11 21.5196 11.1054 21.7071 11.2929C21.8946 11.4804 22 11.7348 22 12C22 12.2652 21.8946 12.5196 21.7071 12.7071C21.5196 12.8946 21.2652 13 21 13H18.66L16.15 18.79C15.9967 19.1465 15.7431 19.4507 15.4199 19.6656C15.0967 19.8804 14.718 19.9966 14.33 20Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </span>
+              <span className="">Customers</span>
+            </li>
+          </Link>
           <li className="flex items-center space-x-4 bg-[#023E8A]/0 text-black px-4 py-3 rounded-lg text-sm">
             <span className="text-black">
               <svg
