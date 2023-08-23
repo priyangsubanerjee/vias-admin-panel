@@ -4,8 +4,8 @@ import React, { useEffect } from "react";
 function AddProduct({ open, setOpen }) {
   const [description, setDescription] = React.useState("");
   const descriptionRef = React.useRef();
+
   useEffect(() => {
-    // append bullet points to description when user presses enter key
     const descriptionInput = document.getElementById("description");
     descriptionInput?.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
@@ -19,6 +19,7 @@ function AddProduct({ open, setOpen }) {
       descriptionRef.current.focus();
     }
   }, [open]);
+
   return (
     <>
       {open && (
@@ -143,7 +144,7 @@ function AddProduct({ open, setOpen }) {
                 Download Information (pdf, png, jpg)
               </h1>
               <div className="mt-5">
-                <button className="mr-6 text-sm px-6 h-12 bg-[#023E8A] text-[#fff] font-normal">
+                <button className="mr-6 text-sm rounded-md px-6 h-12 bg-[#023E8A] text-[#fff] font-normal">
                   Upload files
                 </button>
               </div>
@@ -153,8 +154,33 @@ function AddProduct({ open, setOpen }) {
               <h1 className="text-[#1B1B1B] font-semibold text-[18px]">
                 Collection
               </h1>
+              <div className="mt-6 bg-white h-12 flex items-center px-5">
+                <span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M15.2659 12.0275C16.3051 10.6878 16.7948 9.00252 16.6355 7.31454C16.4762 5.62656 15.6798 4.06267 14.4084 2.94103C13.1369 1.81939 11.486 1.22425 9.79129 1.27669C8.09662 1.32913 6.48559 2.02521 5.28593 3.22332C4.08522 4.42226 3.38687 6.03392 3.33318 7.72987C3.27948 9.42583 3.87449 11.0784 4.99695 12.3509C6.11941 13.6234 7.68484 14.42 9.37424 14.5784C11.0636 14.7368 12.7498 14.245 14.0893 13.2033L14.1251 13.2408L17.6601 16.7767C17.7375 16.8541 17.8294 16.9155 17.9306 16.9574C18.0318 16.9993 18.1402 17.0209 18.2497 17.0209C18.3592 17.0209 18.4676 16.9993 18.5688 16.9574C18.6699 16.9155 18.7618 16.8541 18.8393 16.7767C18.9167 16.6992 18.9781 16.6073 19.02 16.5061C19.0619 16.405 19.0835 16.2966 19.0835 16.1871C19.0835 16.0776 19.0619 15.9691 19.02 15.868C18.9781 15.7668 18.9167 15.6749 18.8393 15.5975L15.3034 12.0625C15.2913 12.0505 15.2787 12.0388 15.2659 12.0275ZM13.5359 4.40249C14.0064 4.86538 14.3806 5.41686 14.6369 6.0251C14.8932 6.63334 15.0266 7.28631 15.0293 7.94634C15.0319 8.60637 14.9039 9.2604 14.6526 9.8707C14.4012 10.481 14.0316 11.0355 13.5648 11.5022C13.0981 11.9689 12.5436 12.3386 11.9333 12.59C11.323 12.8413 10.669 12.9693 10.0089 12.9667C9.34891 12.964 8.69595 12.8306 8.08771 12.5743C7.47947 12.318 6.92799 11.9438 6.46509 11.4733C5.54003 10.5331 5.02397 9.26535 5.02934 7.94634C5.03472 6.62732 5.56107 5.36385 6.49377 4.43116C7.42646 3.49847 8.68993 2.97211 10.0089 2.96674C11.328 2.96136 12.5957 3.47742 13.5359 4.40249Z"
+                      fill="#565656"
+                    />
+                  </svg>
+                </span>
+                <input
+                  type="text"
+                  placeholder="Search for a colection"
+                  className="w-full bg-transparent h-full ml-3 outline-none border-none"
+                  name=""
+                  id=""
+                />
+              </div>
               <div className="whitespace-nowrap overflow-x-auto">
-                <table className="w-fit lg:w-full text-left mt-6 lg:mt-10">
+                <table className="w-fit lg:w-full text-left mt-6 lg:mt-3">
                   <thead>
                     <tr>
                       <th className="font-semibold text-[#777] uppercase text-[13px] px-5 py-4 text-sm tracking-[1.3px]"></th>

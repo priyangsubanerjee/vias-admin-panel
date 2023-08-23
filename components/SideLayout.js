@@ -1,3 +1,4 @@
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
@@ -116,7 +117,10 @@ function SideLayout({ children }) {
           </li>
         </ul>
         <div className="absolute bottom-0 inset-x-0 w-full py-10 border-t">
-          <button className="w-full flex items-center justify-center space-x-2 text-[#FF5858] font-medium">
+          <button
+            onClick={() => signOut()}
+            className="w-full flex items-center justify-center space-x-2 text-[#FF5858] font-medium"
+          >
             <span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
