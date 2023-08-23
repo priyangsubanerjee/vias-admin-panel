@@ -1,7 +1,24 @@
 /* eslint-disable @next/next/no-img-element */
-import React from "react";
+import React, { useEffect } from "react";
 
 function AddProduct({ open, setOpen }) {
+  const [description, setDescription] = React.useState("");
+  const descriptionRef = React.useRef();
+  useEffect(() => {
+    // append bullet points to description when user presses enter key
+    const descriptionInput = document.getElementById("description");
+    descriptionInput?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        setDescription((prev) => prev + "\n• ");
+      }
+    });
+
+    // focus on description input when modal opens
+    if (open) {
+      descriptionRef.current.focus();
+    }
+  }, [open]);
   return (
     <>
       {open && (
@@ -94,10 +111,13 @@ function AddProduct({ open, setOpen }) {
               </h1>
               <div className="w-full overflow-hidden flex items-center bg-[#F0F0F0] border border-[#BEBEBE] rounded-lg mt-3">
                 <textarea
+                  value={description}
+                  ref={descriptionRef}
+                  onChange={(e) => setDescription(e.target.value)}
                   name=""
                   placeholder="Add a product description"
-                  className="p-7 w-full h-full resize-none bg-transparent border-none"
-                  id=""
+                  className="p-7 w-full h-full resize-none bg-transparent border-none outline-none"
+                  id="description"
                   cols="30"
                   rows="10"
                 ></textarea>
