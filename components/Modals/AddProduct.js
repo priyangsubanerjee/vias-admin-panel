@@ -33,6 +33,92 @@ function AddProduct({ open, setOpen }) {
     }
   }, [open]);
 
+  const handleSave = async () => {
+    // if (name == "") {
+    //   alert("Please enter a name for the product");
+    //   return;
+    // }
+    // if (modelNumber == "") {
+    //   alert("Please enter / generate a model number for the product");
+    // }
+    // if (rawImages.length == 0) {
+    //   alert("Please upload at least one image for the product");
+    // }
+    // if (collection.length == 0) {
+    //   alert("Please add at least one item to the collection");
+    // }
+
+    let productImages = [];
+
+    // upload all product images to cloudinary
+
+    for (let i = 0; i < rawImages.length; i++) {
+      const formData = new FormData();
+      formData.append("file", rawImages[i]);
+      const res = await fetch("/api/cloudinary/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const { url, id } = await res.json();
+      productImages.push({ url, id });
+    }
+
+    // upload all downloadble files to cloudinary
+
+    let downloadInformation = [];
+
+    for (let i = 0; i < downloadInfoFiles.length; i++) {
+      const formData = new FormData();
+      formData.append("file", downloadInfoFiles[i]);
+      const res = await fetch("/api/cloudinary/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const { url, id } = await res.json();
+      downloadInformation.push({ url, id });
+    }
+
+    let collections = [...collection];
+
+    for (let i = 0; i < collections.length; i++) {
+      const formData = new FormData();
+      formData.append("file", collections[i].file);
+      const res = await fetch("/api/cloudinary/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const { url, id } = await res.json();
+      collections[i].image = { url, id };
+    }
+
+    const newProduct = {
+      name,
+      modelNumber,
+      productImages,
+      description,
+      assemblyInstructions: videoLinks,
+      downloadInformation,
+      collections: collections.map((item) => {
+        return {
+          name: item.name,
+          width: item.width,
+          tag: item.tag,
+          price: item.price,
+          discountedPrice: item.discountedPrice,
+          inStock: item.inStock,
+          image: item.image,
+        };
+      }),
+    };
+
+    console.log(newProduct);
+
+    const createResponse = await fetch("/api/product/create", {
+      method: "POST",
+      body: JSON.stringify(newProduct),
+    });
+  };
+
   return (
     <>
       {open && (
@@ -93,9 +179,7 @@ function AddProduct({ open, setOpen }) {
                     let random = Math.random().toString(36).substring(5);
                     let name_ = name.split(" ").join("-");
                     setModelNumber(
-                      `#${name_
-                        .toUpperCase()
-                        .substring(0, 6)}-${random.toUpperCase()}`
+                      `#${name_.toUpperCase()}-${random.toUpperCase()}`
                     );
                   }}
                   className="mr-6 text-[#023E8A]"
@@ -343,7 +427,7 @@ function AddProduct({ open, setOpen }) {
                         TOTAL PRICE
                       </th>
                       <th className="font-semibold text-[#777] uppercase text-[12px] px-5 py-4 tracking-[1.3px]">
-                        DISCOUNTED PRICE
+                        DISCOUNTED
                       </th>
                       <th className="font-semibold text-[#777] uppercase text-[12px] px-5 py-4  tracking-[1.3px]">
                         IN STOCK
@@ -358,7 +442,43 @@ function AddProduct({ open, setOpen }) {
                           key={index}
                           className="border-b border-[#cdcdcd] bg-white"
                         >
-                          <td className="font-normal px-5 py-4 text-sm flex items-center space-x-4"></td>
+                          <td className="font-normal px-5 py-4 text-sm">
+                            <button
+                              onClick={() => {
+                                document
+                                  .getElementById(`item-placeholder-${index}`)
+                                  .click();
+                              }}
+                              className="text-black rounded-md h-10 w-10 flex items-center justify-center"
+                            >
+                              {item.file ? (
+                                <img
+                                  src={URL.createObjectURL(item.file)}
+                                  alt=""
+                                  className="h-full w-full object-cover"
+                                />
+                              ) : (
+                                <Icon
+                                  height={20}
+                                  icon="ant-design:picture-outlined"
+                                />
+                              )}
+                            </button>
+                            <input
+                              type="file"
+                              hidden
+                              onChange={(e) => {
+                                let files = e.target.files;
+                                let filesArr = Array.from(files);
+                                setCollection((prev) => {
+                                  let newCollection = [...prev];
+                                  newCollection[index].file = filesArr[0];
+                                  return newCollection;
+                                });
+                              }}
+                              id={`item-placeholder-${index}`}
+                            />
+                          </td>
                           <td className="font-normal px-5 py-4 text-sm">
                             <input
                               value={item.name}
@@ -472,7 +592,12 @@ function AddProduct({ open, setOpen }) {
                     setCollection((prev) => [
                       ...prev,
                       {
-                        image: "",
+                        _id: Math.random().toString(36).substring(6),
+                        file: "",
+                        image: {
+                          url: "",
+                          id: "",
+                        },
                         name: "",
                         width: "",
                         tag: "",
@@ -482,11 +607,19 @@ function AddProduct({ open, setOpen }) {
                       },
                     ]);
                   }}
-                  className="mr-6 w-full text-sm px-6 h-12 bg-[#023E8A] text-[#fff] font-normal"
+                  className="mr-6 w-full text-sm px-6 h-12 bg-[#023E8A] text-[#fff] font-normal rounded-md"
                 >
                   + Add new
                 </button>
               </div>
+            </div>
+            <div className="mt-16 flex justify-end">
+              <button
+                onClick={() => handleSave()}
+                className="bg-[#023E8A] text-white px-5 py-3 rounded-md"
+              >
+                Save product
+              </button>
             </div>
           </div>
         </div>
