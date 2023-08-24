@@ -6,6 +6,7 @@ import { collection } from "@/db/models/admin";
 
 function AddProduct({ open, setOpen }) {
   const imageInputRef = React.useRef();
+  const descriptionRef = React.useRef();
   const fileInputRef = React.useRef();
   const [name, setName] = React.useState("");
   const [modelNumber, setModelNumber] = React.useState("");
@@ -16,7 +17,7 @@ function AddProduct({ open, setOpen }) {
   const [collection, setCollection] = React.useState([]);
   const [description, setDescription] = React.useState("");
 
-  const descriptionRef = React.useRef();
+  const [loading, setLoading] = React.useState(false);
 
   useEffect(() => {
     const descriptionInput = document.getElementById("description");
@@ -47,6 +48,8 @@ function AddProduct({ open, setOpen }) {
     // if (collection.length == 0) {
     //   alert("Please add at least one item to the collection");
     // }
+
+    setLoading(true);
 
     let productImages = [];
 
@@ -117,6 +120,14 @@ function AddProduct({ open, setOpen }) {
       method: "POST",
       body: JSON.stringify(newProduct),
     });
+    const { success, message } = await createResponse.json();
+    if (success) {
+      location.reload();
+    } else {
+      alert(message);
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -621,6 +632,14 @@ function AddProduct({ open, setOpen }) {
                 Save product
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {loading && (
+        <div className="fixed inset-0 h-full w-full z-30 bg-black/50 flex items-center justify-center">
+          <div className="h-[120px] w-[120px] flex items-center justify-center bg-white rounded-md text-[#023E8A]">
+            <Icon height={50} icon="eos-icons:loading" />
           </div>
         </div>
       )}

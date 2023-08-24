@@ -2,9 +2,25 @@
 import AddProduct from "@/components/Modals/AddProduct";
 import ProductRow from "@/components/Rows/ProductRow";
 import SideLayout from "@/components/SideLayout";
+import connectDatabase from "@/db/connect";
+import product from "@/db/models/product";
 import React from "react";
 
-function Inventory() {
+export async function getServerSideProps() {
+  await connectDatabase();
+  let products_ = await product.find({});
+
+  products_ = JSON.parse(JSON.stringify(products_));
+
+  return {
+    props: {
+      products: products_,
+    },
+  };
+}
+
+function Inventory({ products }) {
+  console.log(products);
   const [addProductOpen, setAddProductOpen] = React.useState(false);
   return (
     <SideLayout>
@@ -53,15 +69,14 @@ function Inventory() {
                 <th className="font-semibold text-[#777] uppercase text-[13px] px-5 py-4 text-sm tracking-[1.3px]">
                   MODEL NO.
                 </th>
-                <th className="font-semibold text-[#777] uppercase text-[13px] px-5 py-4 text-sm tracking-[1.3px]">
-                  PRICE
-                </th>
                 <th className="font-semibold uppercase text-[13px] px-5 py-4 text-sm"></th>
                 <th className="font-semibold uppercase text-[13px] px-5 py-4 text-sm"></th>
               </tr>
             </thead>
             <tbody>
-              <ProductRow />
+              {products.map((product, index) => {
+                return <ProductRow key={index} product={product} />;
+              })}
             </tbody>
           </table>
         </div>

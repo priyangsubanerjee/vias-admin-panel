@@ -1,19 +1,19 @@
+/* eslint-disable @next/next/no-img-element */
 import React from "react";
 
-function ProductRow() {
+function ProductRow({ product }) {
   return (
     <>
       <tr className="border-b border-[#cdcdcd]">
         <td className="font-normal px-5 py-4 text-sm flex items-center space-x-4">
           <img
-            src="https://m.media-amazon.com/images/I/712qmZ9K1kL.jpg"
+            src={product.productImages[0].url}
             className="h-12 w-12 rounded-lg"
             alt=""
           />
-          <span>Weston White Shaker</span>
+          <span>{product.name}</span>
         </td>
-        <td className="font-normal px-5 py-4 text-sm">#WESTONWHITESHAKER</td>
-        <td className="font-normal px-5 py-4 text-sm">$45.5</td>
+        <td className="font-normal px-5 py-4 text-sm">{product.modelNumber}</td>
 
         <td className="font-normal px-5 py-4 text-sm">
           <button className="h-10 px-5 text-white rounded bg-[#023E8A]">
