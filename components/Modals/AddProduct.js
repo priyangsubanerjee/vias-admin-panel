@@ -329,24 +329,26 @@ function AddProduct({ open, setOpen }) {
                 <table className="w-fit lg:w-full text-left mt-6 lg:mt-3">
                   <thead>
                     <tr>
-                      <th className="font-semibold text-[#777] uppercase text-[13px] px-5 py-4 text-sm tracking-[1.3px]"></th>
-                      <th className="font-semibold text-[#777] uppercase text-[13px] px-5 py-4 text-sm tracking-[1.3px]">
+                      <th className="font-semibold text-[#777] uppercase text-[10px] px-5 py-4 text-sm tracking-[1.3px]"></th>
+                      <th className="font-semibold text-[#777] uppercase text-[12px] px-5 py-4 text-sm tracking-[1.3px]">
                         Name
                       </th>
-                      <th className="font-semibold text-[#777] uppercase text-[13px] px-5 py-4 text-sm tracking-[1.3px]">
+                      <th className="font-semibold text-[#777] uppercase text-[12px] px-5 py-4 tracking-[1.3px]">
                         WIDTH
                       </th>
-                      <th className="font-semibold text-[#777] uppercase text-[13px] px-5 py-4 text-sm tracking-[1.3px]">
+                      <th className="font-semibold text-[#777] uppercase text-[12px] px-5 py-4 tracking-[1.3px]">
                         TAG
                       </th>
-                      <th className="font-semibold text-[#777] uppercase text-[13px] px-5 py-4 text-sm tracking-[1.3px]">
+                      <th className="font-semibold text-[#777] uppercase text-[12px] px-5 py-4 tracking-[1.3px]">
                         TOTAL PRICE
                       </th>
-                      <th className="font-semibold text-[#777] uppercase text-[13px] px-5 py-4 text-sm tracking-[1.3px]">
+                      <th className="font-semibold text-[#777] uppercase text-[12px] px-5 py-4 tracking-[1.3px]">
                         DISCOUNTED PRICE
                       </th>
-                      <th className="font-semibold text-[#777] uppercase text-[13px] px-5 py-4 text-sm tracking-[1.3px]"></th>
-                      <th className="font-semibold text-[#777] uppercase text-[13px] px-5 py-4 text-sm tracking-[1.3px]"></th>
+                      <th className="font-semibold text-[#777] uppercase text-[12px] px-5 py-4  tracking-[1.3px]">
+                        IN STOCK
+                      </th>
+                      <th className="font-semibold text-[#777] uppercase text-[12px] px-5 py-4 tracking-[1.3px]"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -356,52 +358,107 @@ function AddProduct({ open, setOpen }) {
                           key={index}
                           className="border-b border-[#cdcdcd] bg-white"
                         >
-                          <td className="font-normal px-5 py-4 text-sm flex items-center space-x-4">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                fill="currentColor"
-                                d="M14 9a1.5 1.5 0 1 1 3 0a1.5 1.5 0 0 1-3 0Z"
-                              />
-                              <path
-                                fill="currentColor"
-                                fill-rule="evenodd"
-                                d="M7.268 4.658a54.647 54.647 0 0 1 9.465 0l1.51.132a3.138 3.138 0 0 1 2.831 2.66a30.604 30.604 0 0 1 0 9.1a3.138 3.138 0 0 1-2.831 2.66l-1.51.131c-3.15.274-6.316.274-9.465 0l-1.51-.131a3.138 3.138 0 0 1-2.832-2.66a30.601 30.601 0 0 1 0-9.1a3.138 3.138 0 0 1 2.831-2.66l1.51-.132Zm9.335 1.495a53.147 53.147 0 0 0-9.206 0l-1.51.131A1.638 1.638 0 0 0 4.41 7.672a29.101 29.101 0 0 0-.311 5.17L7.97 8.97a.75.75 0 0 1 1.09.032l3.672 4.13l2.53-.844a.75.75 0 0 1 .796.21l3.519 3.91a29.101 29.101 0 0 0 .014-8.736a1.638 1.638 0 0 0-1.478-1.388l-1.51-.131Zm2.017 11.435l-3.349-3.721l-2.534.844a.75.75 0 0 1-.798-.213l-3.471-3.905l-4.244 4.243c.049.498.11.996.185 1.491a1.638 1.638 0 0 0 1.478 1.389l1.51.131c3.063.266 6.143.266 9.206 0l1.51-.131c.178-.016.35-.06.507-.128Z"
-                                clip-rule="evenodd"
-                              />
-                            </svg>
+                          <td className="font-normal px-5 py-4 text-sm flex items-center space-x-4"></td>
+                          <td className="font-normal px-5 py-4 text-sm">
+                            <input
+                              value={item.name}
+                              className="outline-none"
+                              placeholder="Eg: Base Cabinet"
+                              onChange={(e) => {
+                                let newCollection = [...collection];
+                                newCollection[index].name = e.target.value;
+                                setCollection(newCollection);
+                              }}
+                              type="text"
+                              name=""
+                            />
                           </td>
                           <td className="font-normal px-5 py-4 text-sm">
-                            Base cabinet
+                            <input
+                              value={item.width}
+                              className="outline-none w-[100px]"
+                              placeholder={`Eg: 12"`}
+                              onChange={(e) => {
+                                let newCollection = [...collection];
+                                newCollection[index].width = e.target.value;
+                                setCollection(newCollection);
+                              }}
+                              type="text"
+                              name=""
+                            />
                           </td>
                           <td className="font-normal px-5 py-4 text-sm">
-                            15{'"'}W
+                            <input
+                              value={item.tag}
+                              className="outline-none w-[100px]"
+                              placeholder="#HS-B15"
+                              onChange={(e) => {
+                                let newCollection = [...collection];
+                                newCollection[index].tag = e.target.value;
+                                setCollection(newCollection);
+                              }}
+                              type="text"
+                              name=""
+                            />
                           </td>
                           <td className="font-normal px-5 py-4 text-sm">
-                            #HS-B15
+                            $
+                            <input
+                              value={item.price}
+                              className="outline-none w-[100px]"
+                              placeholder="100"
+                              onChange={(e) => {
+                                let newCollection = [...collection];
+                                newCollection[index].price = e.target.value;
+                                setCollection(newCollection);
+                              }}
+                              type="text"
+                              name=""
+                            />
                           </td>
                           <td className="font-normal px-5 py-4 text-sm">
-                            $45.5
-                          </td>
-                          <td className="font-normal px-5 py-4 text-sm">
-                            $45.5
+                            $
+                            <input
+                              value={item.discountedPrice}
+                              className="outline-none w-[100px]"
+                              placeholder="100"
+                              onChange={(e) => {
+                                let newCollection = [...collection];
+                                newCollection[index].discountedPrice =
+                                  e.target.value;
+                                setCollection(newCollection);
+                              }}
+                              type="text"
+                              name=""
+                            />
                           </td>
                           <td className="font-normal px-5 py-4 text-sm">
                             <Switch
                               onChange={() => {
-                                // update collection
+                                let newCollection = [...collection];
+                                newCollection[index].inStock =
+                                  !newCollection[index].inStock;
+                                setCollection(newCollection);
                               }}
-                              uncheckedHandleIcon={null}
-                              checkedHandleIcon={null}
+                              checkedIcon={null}
+                              uncheckedIcon={null}
                               checked={item.inStock}
                             />
                           </td>
                           <td className="font-normal px-5 py-4 text-sm">
-                            $45.5
+                            <button
+                              onClick={() => {
+                                setCollection((prev) =>
+                                  prev.filter((_, i) => i !== index)
+                                );
+                              }}
+                              className="bg-[#DA3A3A] rounded-md h-10 w-10 flex items-center justify-center text-white"
+                            >
+                              <Icon
+                                height={20}
+                                icon="material-symbols:delete"
+                              />
+                            </button>
                           </td>
                         </tr>
                       );
