@@ -1,9 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect } from "react";
+import { Icon } from "@iconify/react";
+import Switch from "react-switch";
+import { collection } from "@/db/models/admin";
 
 function AddProduct({ open, setOpen }) {
+  const imageInputRef = React.useRef();
+  const fileInputRef = React.useRef();
   const [name, setName] = React.useState("");
   const [modelNumber, setModelNumber] = React.useState("");
+  const [videoLinkPlaceholder, setVideoLinkPlaceholder] = React.useState("");
   const [rawImages, setRawImages] = React.useState([]);
   const [videoLinks, setVideoLinks] = React.useState([]);
   const [downloadInfoFiles, setDownloadInfoFiles] = React.useState([]);
@@ -15,10 +21,6 @@ function AddProduct({ open, setOpen }) {
   useEffect(() => {
     const descriptionInput = document.getElementById("description");
     descriptionInput?.addEventListener("keydown", (e) => {
-      if (e.key === "Shift") {
-        e.preventDefault();
-        setDescription((prev) => prev + "• ");
-      }
       if (e.key === "Enter") {
         e.preventDefault();
         setDescription((prev) => prev + "\n• ");
@@ -62,8 +64,10 @@ function AddProduct({ open, setOpen }) {
               </h1>
               <div className="w-[425px] h-[55px] flex items-center bg-[#F0F0F0] border border-[#BEBEBE] rounded-lg mt-3">
                 <input
-                  className="w-full h-full bg-transparent px-6"
+                  className="w-full h-full bg-transparent px-6 outline-none border-none"
                   placeholder="Eg: Weston White Shaker"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   type="text"
                   name=""
                   id=""
@@ -76,13 +80,28 @@ function AddProduct({ open, setOpen }) {
               </h1>
               <div className="w-[425px] h-[55px] flex items-center bg-[#F0F0F0] border border-[#BEBEBE] rounded-lg mt-3">
                 <input
-                  className="w-full h-full bg-transparent px-6"
+                  className="w-full h-full bg-transparent px-6 outline-none border-none"
                   placeholder="Eg: #WESTONWHITESHAKER"
+                  value={modelNumber}
+                  onChange={(e) => setModelNumber(e.target.value)}
                   type="text"
                   name=""
                   id=""
                 />
-                <button className="mr-6 text-[#023E8A]">Generate</button>
+                <button
+                  onClick={() => {
+                    let random = Math.random().toString(36).substring(5);
+                    let name_ = name.split(" ").join("-");
+                    setModelNumber(
+                      `#${name_
+                        .toUpperCase()
+                        .substring(0, 6)}-${random.toUpperCase()}`
+                    );
+                  }}
+                  className="mr-6 text-[#023E8A]"
+                >
+                  Generate
+                </button>
               </div>
             </div>
             <div className="mt-8">
@@ -101,8 +120,11 @@ function AddProduct({ open, setOpen }) {
                 </svg>
                 <span>Upload images (.jpg , .png , heif)</span>
               </h1>
-              <div className="flex items-center mt-5">
-                <div className="h-[120px] w-[120px] bg-[#808B9A] rounded-lg flex items-center justify-center text-white">
+              <div className="flex items-center mt-5 space-x-5">
+                <div
+                  onClick={() => imageInputRef.current.click()}
+                  className="h-[120px] w-[120px] bg-[#808B9A] rounded-lg flex items-center justify-center text-white"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="44"
@@ -114,7 +136,45 @@ function AddProduct({ open, setOpen }) {
                       d="M12 4a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2h-6v6a1 1 0 1 1-2 0v-6H5a1 1 0 1 1 0-2h6V5a1 1 0 0 1 1-1z"
                     />
                   </svg>
+                  <input
+                    type="file"
+                    onChange={(e) => {
+                      let files = e.target.files;
+                      let filesArr = Array.from(files);
+                      setRawImages((prev) => [...prev, ...filesArr]);
+                    }}
+                    name=""
+                    multiple
+                    id=""
+                    hidden
+                    ref={imageInputRef}
+                  />
                 </div>
+                {rawImages.length > 0 &&
+                  rawImages.map((image, index) => {
+                    return (
+                      <div
+                        className="h-[120px] w-[120px] rounded-lg overflow-hidden relative"
+                        key={index}
+                      >
+                        <button
+                          onClick={() => {
+                            setRawImages((prev) =>
+                              prev.filter((_, i) => i !== index)
+                            );
+                          }}
+                          className="absolute bottom-0 inset-x-0 z-10 bg-[#000]/50 text-white w-full h-8 text-xs"
+                        >
+                          Remove
+                        </button>
+                        <img
+                          className="h-full w-full object-cover"
+                          src={URL.createObjectURL(image)}
+                          alt=""
+                        />
+                      </div>
+                    );
+                  })}
               </div>
             </div>
             <div className="mt-7">
@@ -139,25 +199,100 @@ function AddProduct({ open, setOpen }) {
               <h1 className="text-[#1B1B1B] font-semibold text-[18px]">
                 Assembly Instructions
               </h1>
-              <div className="w-[425px] h-[55px] flex items-center bg-[#F0F0F0] border border-[#BEBEBE] rounded-lg mt-3">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setVideoLinks((prev) => [...prev, videoLinkPlaceholder]);
+                  setVideoLinkPlaceholder("");
+                }}
+                className="w-[425px] h-[55px] flex items-center bg-[#F0F0F0] border border-[#BEBEBE] rounded-lg mt-3"
+              >
                 <input
-                  className="w-full h-full bg-transparent px-6"
+                  className="w-full h-full bg-transparent px-6 outline-none border-none"
                   placeholder="Video link"
+                  value={videoLinkPlaceholder}
+                  onChange={(e) => setVideoLinkPlaceholder(e.target.value)}
                   type="text"
                   name=""
                   id=""
                 />
-                <button className="mr-6 text-[#023E8A]">Add</button>
+                <button type="submit" className="mr-6 text-[#023E8A]">
+                  Add
+                </button>
+              </form>
+              <div className="mt-5 space-y-3">
+                {videoLinks.length > 0 &&
+                  videoLinks.map((link, index) => {
+                    return (
+                      <div
+                        className="flex items-center text-[#023E8A] w-fit"
+                        key={index}
+                      >
+                        <iconify-icon icon="material-symbols:link"></iconify-icon>
+                        <span className="ml-2">{link}</span>
+                        <button
+                          onClick={() => {
+                            setVideoLinks((prev) =>
+                              prev.filter((_, i) => i !== index)
+                            );
+                          }}
+                          className="ml-3"
+                        >
+                          <Icon icon="ic:baseline-delete" />
+                        </button>
+                      </div>
+                    );
+                  })}
               </div>
             </div>
             <div className="mt-7">
               <h1 className="text-[#1B1B1B] font-semibold text-[18px]">
                 Download Information (pdf, png, jpg)
               </h1>
-              <div className="mt-5">
-                <button className="mr-6 text-sm rounded-md px-6 h-12 bg-[#023E8A] text-[#fff] font-normal">
+              <div className="mt-5 flex items-center space-x-3">
+                <button
+                  onClick={() => fileInputRef.current.click()}
+                  className="mr-6 text-sm rounded-md px-6 h-12 bg-[#023E8A] text-[#fff] font-normal"
+                >
+                  <input
+                    onChange={(e) => {
+                      let files = e.target.files;
+                      let filesArr = Array.from(files);
+                      setDownloadInfoFiles((prev) => [...prev, ...filesArr]);
+                    }}
+                    type="file"
+                    ref={fileInputRef}
+                    hidden
+                    name=""
+                    id=""
+                  />
                   Upload files
                 </button>
+                {downloadInfoFiles.length > 0 &&
+                  downloadInfoFiles.map((file, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className="flex items-center text-sm px-4"
+                      >
+                        <span>
+                          {file.name.split(".")[0] +
+                            "." +
+                            file.name.split(".")[1]}
+                        </span>
+                        <button
+                          onClick={() => {
+                            setDownloadInfoFiles((prev) =>
+                              prev.filter((_, i) => i !== index)
+                            );
+                          }}
+                          className="ml-4 text-[#023E8A]"
+                        >
+                          <Icon height={20} icon="ic:baseline-delete" />
+                        </button>
+                      </div>
+                    );
+                  })}
               </div>
             </div>
             <div className="mt-8 h-[1px] bg-[#777777]"></div>
@@ -215,43 +350,83 @@ function AddProduct({ open, setOpen }) {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="border-b border-[#cdcdcd] bg-white">
-                      <td className="font-normal px-5 py-4 text-sm flex items-center space-x-4">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
+                    {collection.map((item, index) => {
+                      return (
+                        <tr
+                          key={index}
+                          className="border-b border-[#cdcdcd] bg-white"
                         >
-                          <path
-                            fill="currentColor"
-                            d="M14 9a1.5 1.5 0 1 1 3 0a1.5 1.5 0 0 1-3 0Z"
-                          />
-                          <path
-                            fill="currentColor"
-                            fill-rule="evenodd"
-                            d="M7.268 4.658a54.647 54.647 0 0 1 9.465 0l1.51.132a3.138 3.138 0 0 1 2.831 2.66a30.604 30.604 0 0 1 0 9.1a3.138 3.138 0 0 1-2.831 2.66l-1.51.131c-3.15.274-6.316.274-9.465 0l-1.51-.131a3.138 3.138 0 0 1-2.832-2.66a30.601 30.601 0 0 1 0-9.1a3.138 3.138 0 0 1 2.831-2.66l1.51-.132Zm9.335 1.495a53.147 53.147 0 0 0-9.206 0l-1.51.131A1.638 1.638 0 0 0 4.41 7.672a29.101 29.101 0 0 0-.311 5.17L7.97 8.97a.75.75 0 0 1 1.09.032l3.672 4.13l2.53-.844a.75.75 0 0 1 .796.21l3.519 3.91a29.101 29.101 0 0 0 .014-8.736a1.638 1.638 0 0 0-1.478-1.388l-1.51-.131Zm2.017 11.435l-3.349-3.721l-2.534.844a.75.75 0 0 1-.798-.213l-3.471-3.905l-4.244 4.243c.049.498.11.996.185 1.491a1.638 1.638 0 0 0 1.478 1.389l1.51.131c3.063.266 6.143.266 9.206 0l1.51-.131c.178-.016.35-.06.507-.128Z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
-                      </td>
-                      <td className="font-normal px-5 py-4 text-sm">
-                        Base cabinet
-                      </td>
-                      <td className="font-normal px-5 py-4 text-sm">
-                        15{'"'}W
-                      </td>
-                      <td className="font-normal px-5 py-4 text-sm">#HS-B15</td>
-                      <td className="font-normal px-5 py-4 text-sm">$45.5</td>
-                      <td className="font-normal px-5 py-4 text-sm">$45.5</td>
-                      <td className="font-normal px-5 py-4 text-sm">$45.5</td>
-                      <td className="font-normal px-5 py-4 text-sm">$45.5</td>
-                    </tr>
+                          <td className="font-normal px-5 py-4 text-sm flex items-center space-x-4">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M14 9a1.5 1.5 0 1 1 3 0a1.5 1.5 0 0 1-3 0Z"
+                              />
+                              <path
+                                fill="currentColor"
+                                fill-rule="evenodd"
+                                d="M7.268 4.658a54.647 54.647 0 0 1 9.465 0l1.51.132a3.138 3.138 0 0 1 2.831 2.66a30.604 30.604 0 0 1 0 9.1a3.138 3.138 0 0 1-2.831 2.66l-1.51.131c-3.15.274-6.316.274-9.465 0l-1.51-.131a3.138 3.138 0 0 1-2.832-2.66a30.601 30.601 0 0 1 0-9.1a3.138 3.138 0 0 1 2.831-2.66l1.51-.132Zm9.335 1.495a53.147 53.147 0 0 0-9.206 0l-1.51.131A1.638 1.638 0 0 0 4.41 7.672a29.101 29.101 0 0 0-.311 5.17L7.97 8.97a.75.75 0 0 1 1.09.032l3.672 4.13l2.53-.844a.75.75 0 0 1 .796.21l3.519 3.91a29.101 29.101 0 0 0 .014-8.736a1.638 1.638 0 0 0-1.478-1.388l-1.51-.131Zm2.017 11.435l-3.349-3.721l-2.534.844a.75.75 0 0 1-.798-.213l-3.471-3.905l-4.244 4.243c.049.498.11.996.185 1.491a1.638 1.638 0 0 0 1.478 1.389l1.51.131c3.063.266 6.143.266 9.206 0l1.51-.131c.178-.016.35-.06.507-.128Z"
+                                clip-rule="evenodd"
+                              />
+                            </svg>
+                          </td>
+                          <td className="font-normal px-5 py-4 text-sm">
+                            Base cabinet
+                          </td>
+                          <td className="font-normal px-5 py-4 text-sm">
+                            15{'"'}W
+                          </td>
+                          <td className="font-normal px-5 py-4 text-sm">
+                            #HS-B15
+                          </td>
+                          <td className="font-normal px-5 py-4 text-sm">
+                            $45.5
+                          </td>
+                          <td className="font-normal px-5 py-4 text-sm">
+                            $45.5
+                          </td>
+                          <td className="font-normal px-5 py-4 text-sm">
+                            <Switch
+                              onChange={() => {
+                                // update collection
+                              }}
+                              uncheckedHandleIcon={null}
+                              checkedHandleIcon={null}
+                              checked={item.inStock}
+                            />
+                          </td>
+                          <td className="font-normal px-5 py-4 text-sm">
+                            $45.5
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
               <div className="mt-5">
-                <button className="mr-6 w-full text-sm px-6 h-12 bg-[#023E8A] text-[#fff] font-normal">
+                <button
+                  onClick={() => {
+                    setCollection((prev) => [
+                      ...prev,
+                      {
+                        image: "",
+                        name: "",
+                        width: "",
+                        tag: "",
+                        totalPrice: "",
+                        discountedPrice: "",
+                        inStock: true,
+                      },
+                    ]);
+                  }}
+                  className="mr-6 w-full text-sm px-6 h-12 bg-[#023E8A] text-[#fff] font-normal"
+                >
                   + Add new
                 </button>
               </div>
