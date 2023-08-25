@@ -134,7 +134,7 @@ function AddProduct({ open, setOpen }) {
     <>
       {open && (
         <div className="fixed inset-0 h-full w-full bg-black/70 pt-10 pb-20 flex justify-center overflow-auto">
-          <div className="w-[80%] h-fit bg-[#D9D9D9] px-12 py-12 rounded-lg relative">
+          <div className="w-[90%] h-fit bg-[#D9D9D9] px-12 py-12 rounded-lg relative">
             <button
               onClick={() => {
                 setOpen(false);
