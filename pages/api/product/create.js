@@ -11,12 +11,14 @@ export default async function handler(req, res) {
     assemblyInstructions,
     downloadInformation,
     collections,
+    category,
   } = JSON.parse(req.body);
 
   console.log(productImages);
 
   const product_ = new product({
     name,
+    category,
     modelNumber,
     productImages,
     description,

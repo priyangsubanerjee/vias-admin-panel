@@ -10,6 +10,7 @@ function AddProduct({ open, setOpen }) {
   const fileInputRef = React.useRef();
   const [name, setName] = React.useState("");
   const [modelNumber, setModelNumber] = React.useState("");
+  const [category, setCategory] = React.useState("kitchen-cabinets");
   const [videoLinkPlaceholder, setVideoLinkPlaceholder] = React.useState("");
   const [rawImages, setRawImages] = React.useState([]);
   const [videoLinks, setVideoLinks] = React.useState([]);
@@ -99,6 +100,7 @@ function AddProduct({ open, setOpen }) {
       modelNumber,
       productImages,
       description,
+      category,
       assemblyInstructions: videoLinks,
       downloadInformation,
       collections: collections.map((item) => {
@@ -113,8 +115,6 @@ function AddProduct({ open, setOpen }) {
         };
       }),
     };
-
-    console.log(newProduct);
 
     const createResponse = await fetch("/api/product/create", {
       method: "POST",
@@ -197,6 +197,44 @@ function AddProduct({ open, setOpen }) {
                 >
                   Generate
                 </button>
+              </div>
+            </div>
+
+            <div className="mt-7">
+              <h1 className="text-[#1B1B1B] font-semibold text-[18px]">
+                Product category
+              </h1>
+              <div className="mt-7 flex items-center space-x-3 text-[13px] font-medium text-[#777]">
+                <span
+                  className={`${
+                    category == "kitchen-cabinets" && "text-[#023E8A]"
+                  }`}
+                >
+                  Kitchen cabinets
+                </span>
+                <Switch
+                  checkedIcon={null}
+                  uncheckedIcon={null}
+                  onColor="#CCCCCC"
+                  offColor="#CCCCCC"
+                  onHandleColor="#023E8A"
+                  offHandleColor="#023E8A"
+                  checked={category == "bathroom-vanities"}
+                  onChange={() =>
+                    setCategory(
+                      category == "kitchen-cabinets"
+                        ? "bathroom-vanities"
+                        : "kitchen-cabinets"
+                    )
+                  }
+                />
+                <span
+                  className={`${
+                    category == "bathroom-vanities" && "text-[#023E8A]"
+                  }`}
+                >
+                  Bathroom vanities
+                </span>
               </div>
             </div>
             <div className="mt-8">
