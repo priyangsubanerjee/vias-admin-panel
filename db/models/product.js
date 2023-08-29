@@ -30,6 +30,21 @@ const productSchema = new Schema({
     type: Array,
     default: [],
   },
+  color: {
+    type: String,
+  },
+  doorStyle: {
+    type: String,
+  },
+  constructionType: {
+    type: String,
+  },
+  features: {
+    type: String,
+  },
+  cabinetStyle: {
+    type: String,
+  },
   collections: {
     type: Array,
     default: [],

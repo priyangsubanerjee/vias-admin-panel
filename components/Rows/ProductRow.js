@@ -22,7 +22,24 @@ function ProductRow({ product }) {
         </td>
 
         <td className="font-normal px-5 py-4 text-sm">
-          <button className="h-10 w-10 bg-[#DA3A3A] rounded-md flex items-center justify-center">
+          <button
+            onClick={async () => {
+              if (!confirm("Are you sure you want to delete this product?"))
+                return;
+
+              let response = await fetch(`/api/product/delete/`, {
+                method: "POST",
+                body: JSON.stringify({
+                  id: product._id,
+                }),
+              });
+              let { success } = await response.json();
+              if (success) {
+                // window.location.reload();
+              }
+            }}
+            className="h-10 w-10 bg-[#DA3A3A] rounded-md flex items-center justify-center"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"

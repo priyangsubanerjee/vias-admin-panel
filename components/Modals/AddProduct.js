@@ -17,7 +17,11 @@ function AddProduct({ open, setOpen }) {
   const [downloadInfoFiles, setDownloadInfoFiles] = React.useState([]);
   const [collection, setCollection] = React.useState([]);
   const [description, setDescription] = React.useState("");
-
+  const [color, setColor] = React.useState("");
+  const [doorStyle, setDoorStyle] = React.useState("");
+  const [constructionType, setConstructionType] = React.useState("");
+  const [features, setFeatures] = React.useState("");
+  const [cabinetStyle, setCabinetStyle] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
   useEffect(() => {
@@ -101,6 +105,11 @@ function AddProduct({ open, setOpen }) {
       productImages,
       description,
       category,
+      color,
+      doorStyle,
+      constructionType,
+      features,
+      cabinetStyle,
       assemblyInstructions: videoLinks,
       downloadInformation,
       collections: collections.map((item) => {
@@ -237,6 +246,7 @@ function AddProduct({ open, setOpen }) {
                 </span>
               </div>
             </div>
+
             <div className="mt-8">
               <h1 className="text-[#1B1B1B] font-semibold text-[18px] flex items-center space-x-2">
                 <svg
@@ -310,6 +320,7 @@ function AddProduct({ open, setOpen }) {
                   })}
               </div>
             </div>
+
             <div className="mt-7">
               <h1 className="text-[#1B1B1B] font-semibold text-[18px]">
                 Description
@@ -328,6 +339,7 @@ function AddProduct({ open, setOpen }) {
                 ></textarea>
               </div>
             </div>
+
             <div className="mt-7">
               <h1 className="text-[#1B1B1B] font-semibold text-[18px]">
                 Assembly Instructions
@@ -378,6 +390,7 @@ function AddProduct({ open, setOpen }) {
                   })}
               </div>
             </div>
+
             <div className="mt-7">
               <h1 className="text-[#1B1B1B] font-semibold text-[18px]">
                 Download Information (pdf, png, jpg)
@@ -428,8 +441,96 @@ function AddProduct({ open, setOpen }) {
                   })}
               </div>
             </div>
+
             <div className="mt-8 h-[1px] bg-[#777777]"></div>
+
             <div className="mt-7">
+              <h1 className="text-[#1B1B1B] font-semibold text-[18px]">
+                Traits
+              </h1>
+
+              <div className="mt-10">
+                <div className="flex items-center space-x-2 text-[#555555] font-medium">
+                  <Icon icon="ic:twotone-color-lens" />
+                  <span className="text-[16px]">Color :</span>
+                </div>
+                <input
+                  type="text"
+                  value={color}
+                  onChange={(e) => setColor(e.target.value)}
+                  className="w-full h-[55px] border border-[#BEBEBE] bg-white rounded-lg mt-2 px-4"
+                  placeholder="Add color"
+                  name=""
+                  id=""
+                />
+              </div>
+
+              <div className="mt-6">
+                <div className="flex items-center space-x-2 text-[#555555] font-medium">
+                  <Icon icon="ic:twotone-door-front" />
+                  <span className="text-[16px]">Door Style</span>
+                </div>
+                <input
+                  type="text"
+                  value={doorStyle}
+                  onChange={(e) => setDoorStyle(e.target.value)}
+                  className="w-full h-[55px] border border-[#BEBEBE] bg-white rounded-lg mt-2 px-4"
+                  placeholder="Add door style"
+                  name=""
+                  id=""
+                />
+              </div>
+
+              <div className="mt-6">
+                <div className="flex items-center space-x-2 text-[#555555] font-medium">
+                  <Icon icon="ion:hammer" />
+                  <span className="text-[16px]">Construction Type</span>
+                </div>
+                <input
+                  type="text"
+                  value={constructionType}
+                  onChange={(e) => setConstructionType(e.target.value)}
+                  className="w-full h-[55px] border border-[#BEBEBE] bg-white rounded-lg mt-2 px-4"
+                  placeholder="Add Construction type"
+                  name=""
+                  id=""
+                />
+              </div>
+
+              <div className="mt-6">
+                <div className="flex items-center space-x-2 text-[#555555] font-medium">
+                  <Icon icon="pajamas:feature-flag" />
+                  <span className="text-[16px]">Features</span>
+                </div>
+                <input
+                  type="text"
+                  value={features}
+                  onChange={(e) => setFeatures(e.target.value)}
+                  className="w-full h-[55px] border border-[#BEBEBE] bg-white rounded-lg mt-2 px-4"
+                  placeholder="Add features"
+                  name=""
+                  id=""
+                />
+              </div>
+
+              <div className="mt-6">
+                <div className="flex items-center space-x-2 text-[#555555] font-medium">
+                  <Icon icon="ic:twotone-door-sliding" />
+                  <span className="text-[16px]">Cabinet Style</span>
+                </div>
+                <input
+                  type="text"
+                  value={cabinetStyle}
+                  onChange={(e) => setCabinetStyle(e.target.value)}
+                  className="w-full h-[55px] border border-[#BEBEBE] bg-white rounded-lg mt-2 px-4"
+                  placeholder="Add Cabinet Style"
+                  name=""
+                  id=""
+                />
+              </div>
+            </div>
+
+            <div className="mt-20">
               <h1 className="text-[#1B1B1B] font-semibold text-[18px]">
                 Collection
               </h1>
@@ -662,6 +763,7 @@ function AddProduct({ open, setOpen }) {
                 </button>
               </div>
             </div>
+
             <div className="mt-16 flex justify-end">
               <button
                 onClick={() => handleSave()}
