@@ -41,19 +41,75 @@ function AddProduct({ open, setOpen }) {
   }, [open]);
 
   const handleSave = async () => {
-    // if (name == "") {
-    //   alert("Please enter a name for the product");
-    //   return;
-    // }
-    // if (modelNumber == "") {
-    //   alert("Please enter / generate a model number for the product");
-    // }
-    // if (rawImages.length == 0) {
-    //   alert("Please upload at least one image for the product");
-    // }
-    // if (collection.length == 0) {
-    //   alert("Please add at least one item to the collection");
-    // }
+    if (name == "") {
+      alert("Please enter a name for the product");
+      return;
+    }
+    if (modelNumber == "") {
+      alert("Please enter / generate a model number for the product");
+      return;
+    }
+    if (rawImages.length == 0) {
+      alert("Please upload at least one image for the product");
+      return;
+    }
+
+    if (color == "") {
+      alert("Please enter a color for the product");
+      return;
+    }
+    if (doorStyle == "") {
+      alert("Please enter a door style for the product");
+      return;
+    }
+
+    if (constructionType == "") {
+      alert("Please enter a construction type for the product");
+      return;
+    }
+
+    if (features == "") {
+      alert("Please enter a features for the product");
+      return;
+    }
+
+    if (cabinetStyle == "") {
+      alert("Please enter a cabinet style for the product");
+      return;
+    }
+
+    if (collection.length == 0) {
+      alert("Please add at least one item to the collection");
+      return;
+    }
+
+    let collectionPass = true;
+    collection.forEach((item) => {
+      if (item.name == "") {
+        collectionPass = false;
+        alert("Please enter a name for each item in the collection");
+        return;
+      }
+      if (item.width == "") {
+        collectionPass = false;
+        alert("Please enter a width for each item in the collection");
+        return;
+      }
+      if (item.price == "") {
+        collectionPass = false;
+        alert("Please enter a price for each item in the collection");
+        return;
+      }
+      if (item.discountedPrice == "") {
+        collectionPass = false;
+        alert(
+          "Please enter a discounted price for each item in the collection"
+        );
+        return;
+      }
+    });
+
+    if (!collectionPass) return;
 
     setLoading(true);
 
