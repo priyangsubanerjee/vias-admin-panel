@@ -20,7 +20,6 @@ export async function getServerSideProps() {
 }
 
 function Inventory({ products }) {
-  console.log(products);
   const [addProductOpen, setAddProductOpen] = React.useState(false);
   return (
     <SideLayout>

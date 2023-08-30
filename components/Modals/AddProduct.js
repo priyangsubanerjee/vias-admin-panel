@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { Icon } from "@iconify/react";
 import Switch from "react-switch";
 import { collection } from "@/db/models/admin";
+import { v4 as uuidv4 } from "uuid";
 
 function AddProduct({ open, setOpen }) {
   const imageInputRef = React.useRef();
@@ -100,7 +101,7 @@ function AddProduct({ open, setOpen }) {
         collections[i].image = { url, id };
       } else {
         collections[i].image = {
-          url: "https://res.cloudinary.com/dxkufsejm/image/upload/v1634176219/placeholder-image_zqjz3r.png",
+          url: "https://cdn-icons-png.flaticon.com/512/1160/1160358.png",
           id: "placeholder-image_zqjz3r",
         };
       }
@@ -121,6 +122,7 @@ function AddProduct({ open, setOpen }) {
       downloadInformation,
       collections: collections.map((item) => {
         return {
+          _id: item._id,
           name: item.name,
           width: item.width,
           tag: item.tag,
@@ -749,7 +751,7 @@ function AddProduct({ open, setOpen }) {
                     setCollection((prev) => [
                       ...prev,
                       {
-                        _id: Math.random().toString(36).substring(6),
+                        _id: uuidv4(),
                         file: "",
                         image: {
                           url: "",
