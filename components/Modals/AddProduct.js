@@ -89,14 +89,21 @@ function AddProduct({ open, setOpen }) {
     let collections = [...collection];
 
     for (let i = 0; i < collections.length; i++) {
-      const formData = new FormData();
-      formData.append("file", collections[i].file);
-      const res = await fetch("/api/cloudinary/upload", {
-        method: "POST",
-        body: formData,
-      });
-      const { url, id } = await res.json();
-      collections[i].image = { url, id };
+      if (collection.file) {
+        const formData = new FormData();
+        formData.append("file", collections[i].file);
+        const res = await fetch("/api/cloudinary/upload", {
+          method: "POST",
+          body: formData,
+        });
+        const { url, id } = await res.json();
+        collections[i].image = { url, id };
+      } else {
+        collections[i].image = {
+          url: "https://res.cloudinary.com/dxkufsejm/image/upload/v1634176219/placeholder-image_zqjz3r.png",
+          id: "placeholder-image_zqjz3r",
+        };
+      }
     }
 
     const newProduct = {
