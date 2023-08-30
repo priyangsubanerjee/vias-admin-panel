@@ -74,7 +74,7 @@ function ProductRow({ product }) {
               });
               let { success } = await response.json();
               if (success) {
-                // window.location.reload();
+                window.location.reload();
               }
             }}
             className="h-10 w-10 bg-[#DA3A3A] rounded-md flex items-center justify-center"
