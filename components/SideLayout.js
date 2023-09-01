@@ -1,3 +1,4 @@
+import { Icon } from "@iconify/react";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -13,7 +14,7 @@ function SideLayout({ children }) {
           GENERAL
         </p>
         <ul className="mt-7 space-y-2">
-          <Link href={"/inventory"}>
+          <Link className="block" href={"/inventory"}>
             <li
               style={{
                 background: router.pathname === "/inventory" && "#023E8A",
@@ -41,22 +42,24 @@ function SideLayout({ children }) {
               <span className="">Inventory</span>
             </li>
           </Link>
-          <li className="flex items-center space-x-4 bg-[#023E8A]/0 text-black px-4 py-3 rounded-lg text-sm">
-            <span className="text-black">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
+          <Link className="block" href={"/orders"}>
+            <li
+              style={{
+                background: router.pathname === "/orders" && "#023E8A",
+                color: router.pathname === "/orders" ? "white" : "black",
+              }}
+              className="flex items-center space-x-4  px-4 py-3 rounded-lg text-sm"
+            >
+              <span
+                style={{
+                  color: router.pathname === "/orders" ? "" : "black",
+                }}
               >
-                <path
-                  d="M14.33 20H14.12C13.6968 19.958 13.2979 19.7822 12.9814 19.498C12.6649 19.2139 12.4472 18.8363 12.36 18.42L9.68 6L6.92 12.4C6.84193 12.5789 6.71323 12.731 6.54975 12.8376C6.38627 12.9442 6.19517 13.0007 6 13H3C2.73478 13 2.48043 12.8946 2.29289 12.7071C2.10536 12.5196 2 12.2652 2 12C2 11.7348 2.10536 11.4804 2.29289 11.2929C2.48043 11.1054 2.73478 11 3 11H5.34L7.85 5.21C8.01896 4.82146 8.30695 4.49662 8.67244 4.28231C9.03793 4.068 9.46203 3.97529 9.88361 4.01756C10.3052 4.05983 10.7024 4.23489 11.0181 4.51749C11.3338 4.8001 11.5515 5.17565 11.64 5.59L14.32 18L17.08 11.62C17.155 11.4374 17.2824 11.2811 17.4461 11.1707C17.6099 11.0604 17.8026 11.001 18 11H21C21.2652 11 21.5196 11.1054 21.7071 11.2929C21.8946 11.4804 22 11.7348 22 12C22 12.2652 21.8946 12.5196 21.7071 12.7071C21.5196 12.8946 21.2652 13 21 13H18.66L16.15 18.79C15.9967 19.1465 15.7431 19.4507 15.4199 19.6656C15.0967 19.8804 14.718 19.9966 14.33 20Z"
-                  fill="currentColor"
-                />
-              </svg>
-            </span>
-            <span className="">Orders</span>
-          </li>
+                <Icon height={24} icon="icon-park-solid:transaction-order" />
+              </span>
+              <span className="">Orders</span>
+            </li>
+          </Link>
           <li className="flex items-center space-x-4 bg-[#023E8A]/0 text-black px-4 py-3 rounded-lg text-sm">
             <span className="text-black">
               <svg
@@ -83,17 +86,7 @@ function SideLayout({ children }) {
               className="flex items-center space-x-4  px-4 py-3 rounded-lg text-sm"
             >
               <span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M14.33 20H14.12C13.6968 19.958 13.2979 19.7822 12.9814 19.498C12.6649 19.2139 12.4472 18.8363 12.36 18.42L9.68 6L6.92 12.4C6.84193 12.5789 6.71323 12.731 6.54975 12.8376C6.38627 12.9442 6.19517 13.0007 6 13H3C2.73478 13 2.48043 12.8946 2.29289 12.7071C2.10536 12.5196 2 12.2652 2 12C2 11.7348 2.10536 11.4804 2.29289 11.2929C2.48043 11.1054 2.73478 11 3 11H5.34L7.85 5.21C8.01896 4.82146 8.30695 4.49662 8.67244 4.28231C9.03793 4.068 9.46203 3.97529 9.88361 4.01756C10.3052 4.05983 10.7024 4.23489 11.0181 4.51749C11.3338 4.8001 11.5515 5.17565 11.64 5.59L14.32 18L17.08 11.62C17.155 11.4374 17.2824 11.2811 17.4461 11.1707C17.6099 11.0604 17.8026 11.001 18 11H21C21.2652 11 21.5196 11.1054 21.7071 11.2929C21.8946 11.4804 22 11.7348 22 12C22 12.2652 21.8946 12.5196 21.7071 12.7071C21.5196 12.8946 21.2652 13 21 13H18.66L16.15 18.79C15.9967 19.1465 15.7431 19.4507 15.4199 19.6656C15.0967 19.8804 14.718 19.9966 14.33 20Z"
-                    fill="currentColor"
-                  />
-                </svg>
+                <Icon height={24} icon="clarity:users-solid" />
               </span>
               <span className="">Customers</span>
             </li>
