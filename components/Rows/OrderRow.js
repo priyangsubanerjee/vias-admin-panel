@@ -1,23 +1,29 @@
 /* eslint-disable @next/next/no-img-element */
 import { Icon } from "@iconify/react";
-import React from "react";
+import React, { useContext } from "react";
+import ShippingStatus from "../Modals/ShippingStatus";
+import GlobalState from "@/context/GlobalStates";
 
-function OrderRow({ order }) {
+function OrderRow({ order, setOrders }) {
+  const { refreshOrders } = useContext(GlobalState);
   const returnFormattedDate = () => {
     let date = new Date(order.orderPlaceOn).toDateString();
     let date2 = new Date(order.orderPlaceOn).toLocaleTimeString();
     return date + " " + date2;
   };
 
+  const [shippingStatusOpen, setShippingStatusOpen] = React.useState(false);
+
   return (
     <>
-      <tr className="border-b border-[#cdcdcd] ">
-        <td className="font-normal px-5 py-4 text-sm">
+      <tr className="border-b border-[#cdcdcd] h-12">
+        <td className="font-normal px-5 h-full text-sm">
           {returnFormattedDate()}
         </td>
-        <td className="font-normal px-5 py-4 text-sm flex items-center space-x-4">
-          {order.orderNumber}
+        <td className="font-normal px-5 py-4 text-sm">
+          {order.paymentSuccessfull ? "Success" : "Pending"}
         </td>
+        <td className="font-normal px-5 py-4 text-sm">{order.orderNumber}</td>
         <td className="font-normal px-5 py-4 text-sm">
           {order.shippingNumber}
         </td>
@@ -28,19 +34,21 @@ function OrderRow({ order }) {
           </button>
         </td>
         <td className="font-normal px-5 py-4 text-sm">
-          <button className="h-10 w-10 rounded bg-neutral-200 flex items-center justify-center">
+          <button
+            onClick={() => setShippingStatusOpen(true)}
+            className="h-10 w-10 rounded bg-neutral-200 flex items-center justify-center"
+          >
             <Icon height={18} icon="la:shipping-fast" />
           </button>
         </td>
-
         <td className="font-normal px-5 py-4 text-sm">${order.totalAmount}</td>
-
-        <td className="font-normal px-5 py-4 text-sm flex items-center">
-          <button className="h-10 w-10 rounded bg-neutral-200 flex items-center justify-center">
-            <Icon height={18} icon="fa-solid:file-invoice-dollar" />
-          </button>
-        </td>
       </tr>
+
+      <ShippingStatus
+        order={order}
+        setOpen={setShippingStatusOpen}
+        open={shippingStatusOpen}
+      />
     </>
   );
 }

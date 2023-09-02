@@ -1,9 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
+import GlobalState from "@/context/GlobalStates";
 import { Icon } from "@iconify/react";
 import React, { useEffect } from "react";
 import Switch from "react-switch";
 
 function ProductRow({ product }) {
+  const { refreshProducts } = React.useContext(GlobalState);
+  const [loading, setLoading] = React.useState(false);
   const [productStaticProp, setProductStaticProp] = React.useState(
     product || {}
   );
@@ -38,6 +41,140 @@ function ProductRow({ product }) {
     }));
   }, [description]);
 
+  useEffect(() => {
+    console.log(collection);
+  }, [collection]);
+
+  const handleSave = async () => {
+    let collectionPass = true;
+    collection.forEach((item) => {
+      if (item.name == "") {
+        collectionPass = false;
+        alert("Please enter a name for each item in the collection");
+        return;
+      }
+      if (item.width == "") {
+        collectionPass = false;
+        alert("Please enter a width for each item in the collection");
+        return;
+      }
+      if (item.price == "") {
+        collectionPass = false;
+        alert("Please enter a price for each item in the collection");
+        return;
+      }
+      if (item.discountedPrice == "") {
+        collectionPass = false;
+        alert(
+          "Please enter a discounted price for each item in the collection"
+        );
+        return;
+      }
+    });
+
+    if (!collectionPass) return;
+
+    setLoading(true);
+
+    let productImages = [...productStaticProp.productImages];
+
+    // upload all product images to cloudinary
+
+    for (let i = 0; i < rawImages.length; i++) {
+      const formData = new FormData();
+      formData.append("file", rawImages[i]);
+      const res = await fetch("/api/cloudinary/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const { url, id } = await res.json();
+      productImages.push({ url, id });
+    }
+
+    // upload all downloadble files to cloudinary
+
+    // let downloadInformation = [...productStaticProp.downloadInformation];
+
+    // for (let i = 0; i < downloadInfoFiles.length; i++) {
+    //   const formData = new FormData();
+    //   formData.append("file", downloadInfoFiles[i]);
+    //   const res = await fetch("/api/cloudinary/upload", {
+    //     method: "POST",
+    //     body: formData,
+    //   });
+    //   const { url, id } = await res.json();
+    //   downloadInformation.push({ url, id });
+    // }
+
+    let collections = [...collection];
+
+    console.log(collections);
+
+    if (collection.length > 0) {
+      for (let i = 0; i < collections.length; i++) {
+        if (collection[i].file) {
+          console.log("uploading image");
+          const formData = new FormData();
+          formData.append("file", collections[i].file);
+          const res = await fetch("/api/cloudinary/upload", {
+            method: "POST",
+            body: formData,
+          });
+          const { url, id } = await res.json();
+          collections[i].image = { url, id };
+        } else {
+          collections[i].image = {
+            url: "https://cdn-icons-png.flaticon.com/512/1160/1160358.png",
+            id: "placeholder-image_zqjz3r",
+          };
+        }
+      }
+    }
+
+    const newProduct = {
+      id: product._id,
+      name: productStaticProp.name,
+      modelNumber: productStaticProp.modelNumber,
+      productImages: productImages,
+      description: productStaticProp.description,
+      category: productStaticProp.category,
+      color: productStaticProp.color,
+      doorStyle: productStaticProp.doorStyle,
+      constructionType: productStaticProp.constructionType,
+      features: productStaticProp.features,
+      cabinetStyle: productStaticProp.cabinetStyle,
+      collections:
+        collections.length > 0
+          ? collections.map((item) => {
+              return {
+                _id: item._id,
+                name: item.name,
+                width: item.width,
+                tag: item.tag,
+                price: item.price,
+                discountedPrice: item.discountedPrice,
+                inStock: item.inStock,
+                image: item.image,
+              };
+            })
+          : [],
+    };
+
+    const createResponse = await fetch("/api/product/update", {
+      method: "POST",
+      body: JSON.stringify(newProduct),
+    });
+    const { success, message } = await createResponse.json();
+    if (success) {
+      refreshProducts();
+      setEditLayerOpen(false);
+    } else {
+      alert(message);
+    }
+
+    setLoading(false);
+  };
+
   return (
     <>
       <tr className="border-b border-[#cdcdcd]">
@@ -65,7 +202,7 @@ function ProductRow({ product }) {
             onClick={async () => {
               if (!confirm("Are you sure you want to delete this product?"))
                 return;
-
+              setLoading(true);
               let response = await fetch(`/api/product/delete/`, {
                 method: "POST",
                 body: JSON.stringify({
@@ -74,8 +211,9 @@ function ProductRow({ product }) {
               });
               let { success } = await response.json();
               if (success) {
-                window.location.reload();
+                refreshProducts();
               }
+              setLoading(false);
             }}
             className="h-10 w-10 bg-[#DA3A3A] rounded-md flex items-center justify-center"
           >
@@ -486,16 +624,24 @@ function ProductRow({ product }) {
                                 }}
                                 className="text-black rounded-md h-10 w-10 flex items-center justify-center"
                               >
-                                {item.file ? (
+                                {item.file == null ? (
+                                  item.image.url ? (
+                                    <img
+                                      src={item.image.url}
+                                      alt=""
+                                      className="h-full w-full object-cover"
+                                    />
+                                  ) : (
+                                    <Icon
+                                      height={20}
+                                      icon="ant-design:picture-outlined"
+                                    />
+                                  )
+                                ) : (
                                   <img
                                     src={URL.createObjectURL(item.file)}
                                     alt=""
                                     className="h-full w-full object-cover"
-                                  />
-                                ) : (
-                                  <Icon
-                                    height={20}
-                                    icon="ant-design:picture-outlined"
                                   />
                                 )}
                               </button>
@@ -628,7 +774,7 @@ function ProductRow({ product }) {
                         ...prev,
                         {
                           _id: Math.random().toString(36).substring(6),
-                          file: "",
+                          file: null,
                           image: {
                             url: "",
                             id: "",
@@ -648,7 +794,24 @@ function ProductRow({ product }) {
                   </button>
                 </div>
               </div>
+
+              <div className="mt-16 flex justify-end">
+                <button
+                  onClick={() => handleSave()}
+                  className="bg-[#023E8A] text-white px-5 py-3 rounded-md"
+                >
+                  Save product
+                </button>
+              </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {loading && (
+        <div className="fixed inset-0 h-full w-full z-30 bg-black/50 flex items-center justify-center">
+          <div className="h-[120px] w-[120px] flex items-center justify-center bg-white rounded-md text-[#023E8A]">
+            <Icon height={50} icon="eos-icons:loading" />
           </div>
         </div>
       )}

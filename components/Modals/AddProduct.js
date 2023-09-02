@@ -53,7 +53,6 @@ function AddProduct({ open, setOpen }) {
       alert("Please upload at least one image for the product");
       return;
     }
-
     if (color == "") {
       alert("Please enter a color for the product");
       return;
@@ -62,12 +61,10 @@ function AddProduct({ open, setOpen }) {
       alert("Please enter a door style for the product");
       return;
     }
-
     if (constructionType == "") {
       alert("Please enter a construction type for the product");
       return;
     }
-
     if (features == "") {
       alert("Please enter a features for the product");
       return;

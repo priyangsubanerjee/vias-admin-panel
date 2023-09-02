@@ -2,24 +2,13 @@
 import AddProduct from "@/components/Modals/AddProduct";
 import ProductRow from "@/components/Rows/ProductRow";
 import SideLayout from "@/components/SideLayout";
+import GlobalState from "@/context/GlobalStates";
 import connectDatabase from "@/db/connect";
 import product from "@/db/models/product";
-import React from "react";
+import React, { useContext } from "react";
 
-export async function getServerSideProps() {
-  await connectDatabase();
-  let products_ = await product.find({});
-
-  products_ = JSON.parse(JSON.stringify(products_));
-
-  return {
-    props: {
-      products: products_,
-    },
-  };
-}
-
-function Inventory({ products }) {
+function Inventory() {
+  const { refreshProducts, products } = useContext(GlobalState);
   const [addProductOpen, setAddProductOpen] = React.useState(false);
   return (
     <SideLayout>

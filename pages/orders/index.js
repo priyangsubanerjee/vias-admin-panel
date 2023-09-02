@@ -1,29 +1,57 @@
 import OrderRow from "@/components/Rows/OrderRow";
 import SideLayout from "@/components/SideLayout";
+import GlobalState from "@/context/GlobalStates";
 import connectDatabase from "@/db/connect";
 import orders from "@/db/models/orders";
-import React from "react";
+import React, { useContext, useEffect } from "react";
 
-export async function getServerSideProps() {
-  await connectDatabase();
-  let orders_ = await orders.find({});
+function Orders() {
+  const { orders, refreshOrders } = useContext(GlobalState);
+  const [ordersProp, setOrdersProp] = React.useState([]);
+  const [filterOptions, setFilterOptions] = React.useState([
+    "All",
+    "Success",
+    "Pending",
+  ]);
 
-  orders_ = JSON.parse(JSON.stringify(orders_));
+  const [selectedFilter, setSelectedFilter] = React.useState("All");
 
-  return {
-    props: {
-      orders: orders_,
-    },
-  };
-}
+  useEffect(() => {
+    if (selectedFilter === "All") {
+      setOrdersProp(orders);
+    } else if (selectedFilter === "Success") {
+      setOrdersProp(
+        orders.filter((order) => order.paymentSuccessfull === true)
+      );
+    } else if (selectedFilter === "Pending") {
+      setOrdersProp(
+        orders.filter((order) => order.paymentSuccessfull === false)
+      );
+    }
+  }, [orders, selectedFilter]);
 
-function Orders({ orders }) {
-  console.log(orders);
   return (
     <div>
       <SideLayout>
         <div className="px-6 py-10">
           <h1 className="text-xl font-semibold">{orders.length} Orders</h1>
+          <div className="flex items-center space-x-2 mt-5">
+            {filterOptions.map((option, index) => {
+              return (
+                <button
+                  key={index}
+                  onClick={() => setSelectedFilter(option)}
+                  className={`px-3 py-1  rounded-full text-sm font-semibold  ${
+                    selectedFilter == option
+                      ? "text-white bg-[#023E8A]"
+                      : "bg-white text-[#777]"
+                  } `}
+                >
+                  {option}
+                </button>
+              );
+            })}
+          </div>
           <div className="flex items-center mt-5 space-x-6">
             <div className="h-12 bg-white rounded px-5 flex items-center w-full">
               <span className="shrink-0">
@@ -59,6 +87,9 @@ function Orders({ orders }) {
                     Date
                   </th>
                   <th className="font-semibold text-[#777] uppercase text-[13px] px-5 py-4 text-sm tracking-[1.3px]">
+                    Payment
+                  </th>
+                  <th className="font-semibold text-[#777] uppercase text-[13px] px-5 py-4 text-sm tracking-[1.3px]">
                     Order no.
                   </th>
                   <th className="font-semibold text-[#777] uppercase text-[13px] px-5 py-4 text-sm tracking-[1.3px]">
@@ -78,7 +109,7 @@ function Orders({ orders }) {
                 </tr>
               </thead>
               <tbody>
-                {orders.map((order, index) => {
+                {ordersProp.map((order, index) => {
                   return <OrderRow key={index} order={order} />;
                 })}
               </tbody>
