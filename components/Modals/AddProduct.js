@@ -630,7 +630,7 @@ function AddProduct({ open, setOpen }) {
                         Name
                       </th>
                       <th className="font-semibold text-[#777] uppercase text-[12px] px-5 py-4 tracking-[1.3px]">
-                        WIDTH
+                        DIMENSION
                       </th>
                       <th className="font-semibold text-[#777] uppercase text-[12px] px-5 py-4 tracking-[1.3px]">
                         TAG
