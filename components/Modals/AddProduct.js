@@ -25,6 +25,17 @@ function AddProduct({ open, setOpen }) {
   const [cabinetStyle, setCabinetStyle] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
+  const namesList = ["European", "Classic", "Shaker"];
+  const doorStyleList = ["Shaker", "Euro", "Classic"];
+  const colorList = [
+    "White",
+    "Light Gray",
+    "Dark Gray",
+    "Blue",
+    "Black",
+    "Espresso",
+  ];
+
   useEffect(() => {
     const descriptionInput = document.getElementById("description");
     descriptionInput?.addEventListener("keydown", (e) => {
@@ -63,15 +74,6 @@ function AddProduct({ open, setOpen }) {
     }
     if (constructionType == "") {
       alert("Please enter a construction type for the product");
-      return;
-    }
-    if (features == "") {
-      alert("Please enter a features for the product");
-      return;
-    }
-
-    if (cabinetStyle == "") {
-      alert("Please enter a cabinet style for the product");
       return;
     }
 
@@ -236,10 +238,16 @@ function AddProduct({ open, setOpen }) {
                   placeholder="Eg: Weston White Shaker"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  list="nameList"
                   type="text"
                   name=""
                   id=""
                 />
+                <datalist id="nameList">
+                  {namesList.map((item, index) => {
+                    return <option key={index} value={item} />;
+                  })}
+                </datalist>
               </div>
             </div>
             <div className="mt-7">
@@ -522,9 +530,15 @@ function AddProduct({ open, setOpen }) {
                   onChange={(e) => setColor(e.target.value)}
                   className="w-full h-[55px] border border-[#BEBEBE] bg-white rounded-lg mt-2 px-4"
                   placeholder="Add color"
+                  list="colorList"
                   name=""
                   id=""
                 />
+                <datalist id="colorList">
+                  {colorList.map((item, index) => {
+                    return <option key={index} value={item} />;
+                  })}
+                </datalist>
               </div>
 
               <div className="mt-6">
@@ -538,9 +552,15 @@ function AddProduct({ open, setOpen }) {
                   onChange={(e) => setDoorStyle(e.target.value)}
                   className="w-full h-[55px] border border-[#BEBEBE] bg-white rounded-lg mt-2 px-4"
                   placeholder="Add door style"
+                  list="doorStyleList"
                   name=""
                   id=""
                 />
+                <datalist id="doorStyleList">
+                  {doorStyleList.map((item, index) => {
+                    return <option key={index} value={item} />;
+                  })}
+                </datalist>
               </div>
 
               <div className="mt-6">
@@ -559,7 +579,7 @@ function AddProduct({ open, setOpen }) {
                 />
               </div>
 
-              <div className="mt-6">
+              {/* <div className="mt-6">
                 <div className="flex items-center space-x-2 text-[#555555] font-medium">
                   <Icon icon="pajamas:feature-flag" />
                   <span className="text-[16px]">Features</span>
@@ -589,7 +609,7 @@ function AddProduct({ open, setOpen }) {
                   name=""
                   id=""
                 />
-              </div>
+              </div> */}
             </div>
 
             <div className="mt-20">
