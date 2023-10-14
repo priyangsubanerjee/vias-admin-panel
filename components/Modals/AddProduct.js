@@ -36,6 +36,27 @@ function AddProduct({ open, setOpen }) {
     "Espresso",
   ];
 
+  const tagNames = [
+    "SC-B",
+    "SC-W",
+    "SC-T",
+    "SC-TD",
+    "SC-V",
+    "CC-B",
+    "CC-W",
+    "CC-T",
+    "CC-TD",
+    "CC-V",
+    "EUC-B",
+    "EUC-W",
+    "EUC-T",
+    "EUC-TD",
+    "EUC-V",
+  ];
+
+  // Add "#" before every element in the array
+  const tagsWithHash = tagNames.map((tag) => "#" + tag);
+
   useEffect(() => {
     const descriptionInput = document.getElementById("description");
     descriptionInput?.addEventListener("keydown", (e) => {
@@ -741,6 +762,7 @@ function AddProduct({ open, setOpen }) {
                           </td>
                           <td className="font-normal px-5 py-4 text-sm">
                             <input
+                              list="tagList"
                               value={item.tag}
                               className="outline-none w-[100px]"
                               placeholder="#HS-B15"
@@ -752,6 +774,11 @@ function AddProduct({ open, setOpen }) {
                               type="text"
                               name=""
                             />
+                            <datalist id="tagList">
+                              {tagsWithHash.map((item, index) => {
+                                return <option key={index} value={item} />;
+                              })}
+                            </datalist>
                           </td>
                           <td className="font-normal px-5 py-4 text-sm">
                             $
