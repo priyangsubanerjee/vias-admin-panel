@@ -19,6 +19,34 @@ function ProductRow({ product }) {
   const fileInputRef = React.useRef();
   const [description, setDescription] = React.useState(product.description);
 
+  const namesList = ["European", "Classic", "Shaker"];
+  const doorStyleList = ["Shaker", "Euro", "Classic"];
+  const colorList = [
+    "White",
+    "Light Gray",
+    "Dark Gray",
+    "Blue",
+    "Black",
+    "Espresso",
+  ];
+  const tagNames = [
+    "SC-B",
+    "SC-W",
+    "SC-T",
+    "SC-TD",
+    "SC-V",
+    "CC-B",
+    "CC-W",
+    "CC-T",
+    "CC-TD",
+    "CC-V",
+    "EUC-B",
+    "EUC-W",
+    "EUC-T",
+    "EUC-TD",
+    "EUC-V",
+  ];
+
   useEffect(() => {
     const descriptionInput = document.getElementById("description");
     descriptionInput?.addEventListener("keydown", (e) => {
@@ -40,10 +68,6 @@ function ProductRow({ product }) {
       description,
     }));
   }, [description]);
-
-  useEffect(() => {
-    console.log(collection);
-  }, [collection]);
 
   const handleSave = async () => {
     let collectionPass = true;
@@ -271,10 +295,16 @@ function ProductRow({ product }) {
                       name: e.target.value,
                     })
                   }
+                  list="nameList"
                   type="text"
                   name=""
                   id=""
                 />
+                <datalist id="nameList">
+                  {namesList.map((item, index) => {
+                    return <option key={index} value={item} />;
+                  })}
+                </datalist>
               </div>
             </div>
             <div className="mt-7">
@@ -455,6 +485,7 @@ function ProductRow({ product }) {
                 </div>
                 <input
                   type="text"
+                  list="colorList"
                   value={productStaticProp.color}
                   onChange={(e) =>
                     setProductStaticProp({
@@ -467,6 +498,11 @@ function ProductRow({ product }) {
                   name=""
                   id=""
                 />
+                <datalist id="colorList">
+                  {colorList.map((item, index) => {
+                    return <option key={index} value={item} />;
+                  })}
+                </datalist>
               </div>
 
               <div className="mt-6">
@@ -485,9 +521,15 @@ function ProductRow({ product }) {
                   }
                   className="w-full h-[55px] border border-[#BEBEBE] bg-white rounded-lg mt-2 px-4"
                   placeholder="Add door style"
+                  list="doorStyleList"
                   name=""
                   id=""
                 />
+                <datalist id="doorStyleList">
+                  {doorStyleList.map((item, index) => {
+                    return <option key={index} value={item} />;
+                  })}
+                </datalist>
               </div>
 
               <div className="mt-6">
@@ -506,48 +548,6 @@ function ProductRow({ product }) {
                   }
                   className="w-full h-[55px] border border-[#BEBEBE] bg-white rounded-lg mt-2 px-4"
                   placeholder="Add Construction type"
-                  name=""
-                  id=""
-                />
-              </div>
-
-              <div className="mt-6">
-                <div className="flex items-center space-x-2 text-[#555555] font-medium">
-                  <Icon icon="pajamas:feature-flag" />
-                  <span className="text-[16px]">Features</span>
-                </div>
-                <input
-                  type="text"
-                  value={productStaticProp.features}
-                  onChange={(e) =>
-                    setProductStaticProp({
-                      ...productStaticProp,
-                      features: e.target.value,
-                    })
-                  }
-                  className="w-full h-[55px] border border-[#BEBEBE] bg-white rounded-lg mt-2 px-4"
-                  placeholder="Add features"
-                  name=""
-                  id=""
-                />
-              </div>
-
-              <div className="mt-6">
-                <div className="flex items-center space-x-2 text-[#555555] font-medium">
-                  <Icon icon="ic:twotone-door-sliding" />
-                  <span className="text-[16px]">Cabinet Style</span>
-                </div>
-                <input
-                  type="text"
-                  value={productStaticProp.cabinetStyle}
-                  onChange={(e) =>
-                    setProductStaticProp({
-                      ...productStaticProp,
-                      cabinetStyle: e.target.value,
-                    })
-                  }
-                  className="w-full h-[55px] border border-[#BEBEBE] bg-white rounded-lg mt-2 px-4"
-                  placeholder="Add Cabinet Style"
                   name=""
                   id=""
                 />

@@ -55,7 +55,7 @@ function AddProduct({ open, setOpen }) {
   ];
 
   // Add "#" before every element in the array
-  const tagsWithHash = tagNames.map((tag) => "#" + tag);
+  const tagsWithHash = tagNames.map((tag) => tag);
 
   useEffect(() => {
     const descriptionInput = document.getElementById("description");
