@@ -693,6 +693,7 @@ function ProductRow({ product }) {
                                 value={item.tag}
                                 className="outline-none w-[100px]"
                                 placeholder="#HS-B15"
+                                list="tagList"
                                 onChange={(e) => {
                                   let newCollection = [...collection];
                                   newCollection[index].tag = e.target.value;
@@ -701,6 +702,11 @@ function ProductRow({ product }) {
                                 type="text"
                                 name=""
                               />
+                              <datalist id="tagList">
+                                {tagList.map((item, index) => {
+                                  return <option key={index} value={item} />;
+                                })}
+                              </datalist>
                             </td>
                             <td className="font-normal px-5 py-4 text-sm">
                               $
