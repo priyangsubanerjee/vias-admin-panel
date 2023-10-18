@@ -29,7 +29,7 @@ function ProductRow({ product }) {
     "Black",
     "Espresso",
   ];
-  const tagNames = [
+  const tagList = [
     "SC-B",
     "SC-W",
     "SC-T",
