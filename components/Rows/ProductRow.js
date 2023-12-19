@@ -3,6 +3,7 @@ import GlobalState from "@/context/GlobalStates";
 import { Icon } from "@iconify/react";
 import React, { useEffect } from "react";
 import Switch from "react-switch";
+import Papa from "papaparse";
 
 function ProductRow({ product }) {
   const { refreshProducts } = React.useContext(GlobalState);
@@ -72,22 +73,22 @@ function ProductRow({ product }) {
   const handleSave = async () => {
     let collectionPass = true;
     collection.forEach((item) => {
-      if (item.name == "") {
+      if (item?.name == "") {
         collectionPass = false;
         alert("Please enter a name for each item in the collection");
         return;
       }
-      if (item.width == "") {
+      if (item?.width == "") {
         collectionPass = false;
         alert("Please enter a width for each item in the collection");
         return;
       }
-      if (item.price == "") {
+      if (item?.price == "") {
         collectionPass = false;
         alert("Please enter a price for each item in the collection");
         return;
       }
-      if (item.discountedPrice == "") {
+      if (item?.discountedPrice == "") {
         collectionPass = false;
         alert(
           "Please enter a discounted price for each item in the collection"
@@ -132,7 +133,7 @@ function ProductRow({ product }) {
 
     let collections = [...collection];
 
-    console.log(collections);
+    // console.log(collections);
 
     if (collection.length > 0) {
       for (let i = 0; i < collections.length; i++) {
@@ -170,17 +171,17 @@ function ProductRow({ product }) {
       collections:
         collections.length > 0
           ? collections.map((item) => {
-              return {
-                _id: item._id,
-                name: item.name,
-                width: item.width,
-                tag: item.tag,
-                price: item.price,
-                discountedPrice: item.discountedPrice,
-                inStock: item.inStock,
-                image: item.image,
-              };
-            })
+            return {
+              _id: item?._id,
+              name: item?.name,
+              width: item?.width,
+              tag: item?.tag,
+              price: item?.price,
+              discountedPrice: item?.discountedPrice,
+              inStock: item?.inStock,
+              image: item?.image,
+            };
+          })
           : [],
     };
 
@@ -195,8 +196,36 @@ function ProductRow({ product }) {
     } else {
       alert(message);
     }
-
     setLoading(false);
+  };
+
+  function exportToCSV(data, fileName) {
+    const csv = Papa.unparse(data);
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  const handleExportCSV = async () => {
+    const collectionsToExport = [];
+    collection.forEach((item) => {
+      const newCollection = {
+        Name: item?.name,
+        Width: `${item?.width}`,
+        Tag: item?.tag,
+        Price: item?.price,
+        DiscountedPrice: item?.discountedPrice,
+        InStock: item?.inStock,
+        Image: item.image.url.split('/').pop()
+      };
+      collectionsToExport.push(newCollection);
+    });
+
+    await exportToCSV(collectionsToExport, `${productStaticProp.name}_collection_data.csv`);
   };
 
   return (
@@ -204,7 +233,7 @@ function ProductRow({ product }) {
       <tr className="border-b border-[#cdcdcd]">
         <td className="font-normal px-5 py-4 text-sm flex items-center space-x-4">
           <img
-            src={product.productImages[0].url}
+            src={product.productImages[0]?.url}
             className="h-12 w-12 rounded-lg"
             alt=""
           />
@@ -552,11 +581,17 @@ function ProductRow({ product }) {
                   id=""
                 />
               </div>
-
               <div className="mt-20">
-                <h1 className="text-[#1B1B1B] font-semibold text-[18px]">
-                  Collection
-                </h1>
+                <div className="text-[#1B1B1B] font-semibold text-[18px] flex justify-between">
+                  <div>
+                    Collection
+                  </div>
+                  {!collection.length > 0 ? "" :
+                    <div className="flex items-center">
+                      <button className="h-8 bg-[#133365] shrink-0 text-end whitespace-nowrap text-sm px-5 text-white rounded" onClick={handleExportCSV} >Export to CSV</button>
+                    </div>
+                  }
+                </div>
                 <div className="mt-6 bg-white h-12 flex items-center px-5">
                   <span>
                     <svg
@@ -624,10 +659,10 @@ function ProductRow({ product }) {
                                 }}
                                 className="text-black rounded-md h-10 w-10 flex items-center justify-center"
                               >
-                                {item.file == null ? (
-                                  item.image.url ? (
+                                {item?.file == null ? (
+                                  item?.image.url ? (
                                     <img
-                                      src={item.image.url}
+                                      src={item?.image.url}
                                       alt=""
                                       className="h-full w-full object-cover"
                                     />
@@ -639,7 +674,7 @@ function ProductRow({ product }) {
                                   )
                                 ) : (
                                   <img
-                                    src={URL.createObjectURL(item.file)}
+                                    src={URL.createObjectURL(item?.file)}
                                     alt=""
                                     className="h-full w-full object-cover"
                                   />
@@ -662,7 +697,7 @@ function ProductRow({ product }) {
                             </td>
                             <td className="font-normal px-5 py-4 text-sm">
                               <input
-                                value={item.name}
+                                value={item?.name}
                                 className="outline-none"
                                 placeholder="Eg: Base Cabinet"
                                 onChange={(e) => {
@@ -676,7 +711,7 @@ function ProductRow({ product }) {
                             </td>
                             <td className="font-normal px-5 py-4 text-sm">
                               <input
-                                value={item.width}
+                                value={item?.width}
                                 className="outline-none w-[100px]"
                                 placeholder={`Eg: 12"`}
                                 onChange={(e) => {
@@ -690,7 +725,7 @@ function ProductRow({ product }) {
                             </td>
                             <td className="font-normal px-5 py-4 text-sm">
                               <input
-                                value={item.tag}
+                                value={item?.tag}
                                 className="outline-none w-[100px]"
                                 placeholder="#HS-B15"
                                 list="tagList"
@@ -711,7 +746,7 @@ function ProductRow({ product }) {
                             <td className="font-normal px-5 py-4 text-sm">
                               $
                               <input
-                                value={item.price}
+                                value={item?.price}
                                 className="outline-none w-[100px]"
                                 placeholder="100"
                                 onChange={(e) => {
@@ -726,7 +761,7 @@ function ProductRow({ product }) {
                             <td className="font-normal px-5 py-4 text-sm">
                               $
                               <input
-                                value={item.discountedPrice}
+                                value={item?.discountedPrice}
                                 className="outline-none w-[100px]"
                                 placeholder="100"
                                 onChange={(e) => {
@@ -749,7 +784,7 @@ function ProductRow({ product }) {
                                 }}
                                 checkedIcon={null}
                                 uncheckedIcon={null}
-                                checked={item.inStock}
+                                checked={item?.inStock}
                               />
                             </td>
                             <td className="font-normal px-5 py-4 text-sm">

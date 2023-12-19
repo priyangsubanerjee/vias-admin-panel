@@ -1,15 +1,59 @@
 /* eslint-disable @next/next/no-img-element */
+import AddMultipleProd from "@/components/Modals/AddMultipleProd";
 import AddProduct from "@/components/Modals/AddProduct";
+import AddProductCollections from "@/components/Modals/AddProductCollections";
 import ProductRow from "@/components/Rows/ProductRow";
 import SideLayout from "@/components/SideLayout";
 import GlobalState from "@/context/GlobalStates";
 import connectDatabase from "@/db/connect";
 import product from "@/db/models/product";
 import React, { useContext } from "react";
+import Papa from "papaparse";
 
 function Inventory() {
   const { refreshProducts, products } = useContext(GlobalState);
   const [addProductOpen, setAddProductOpen] = React.useState(false);
+  const [addMultiProductOpen, setAddMultiProductOpen] = React.useState(false);
+  const [addProductCollectionOpen, setAddProductCollectionOpen] = React.useState(false);
+
+
+  function exportToCSV(data, fileName) {
+    const csv = Papa.unparse(data);
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  const handleExportCSV = async () => {
+    const productsToExport = [];
+    products.forEach((product) => {
+
+      const newProduct = {
+        Name: product.name,
+        ModelNumber: product.modelNumber,
+        ProductImages: product.productImages.map(item => item.url.split('/').pop()).join(','),
+        Description: product.description,
+        Category: product.category,
+        Color: product.color,
+        DoorStyle: product.doorStyle,
+        ConstructionType: product.constructionType,
+        Features: product.features,
+        CabinetStyle: product.cabinetStyle,
+        // assemblyInstructions: [],
+        // downloadInformation: [],
+        // collections: [],
+      };
+
+      productsToExport.push(newProduct);
+    });
+
+    await exportToCSV(productsToExport, 'product_data.csv');
+  };
+
   return (
     <SideLayout>
       <div className="px-6 py-10">
@@ -46,8 +90,24 @@ function Inventory() {
           >
             + Add a product
           </button>
+          <button
+            onClick={() => setAddMultiProductOpen(true)}
+            className="h-12 bg-[#133365] shrink-0 whitespace-nowrap text-sm px-5 text-white rounded"
+          >
+            + Add multiple product
+          </button>
+          <button
+            onClick={() => setAddProductCollectionOpen(true)}
+            className="h-12 bg-[#133365] shrink-0 whitespace-nowrap text-sm px-5 text-white rounded"
+          >
+            + Add product collections
+          </button>
         </div>
-        <div className="whitespace-nowrap overflow-x-auto">
+        <div className="whitespace-nowrap overflow-x-auto ">
+          <div class="w-[100%] flex items-center mt-3">
+            <span class="w-full h-full bg-transparent px-6" />
+            <button className="h-8 bg-[#133365] shrink-0 whitespace-nowrap text-sm px-5 text-white rounded" onClick={handleExportCSV}>Export to CSV</button>
+          </div>
           <table className="w-fit lg:w-full text-left mt-6 lg:mt-10">
             <thead>
               <tr>
@@ -57,8 +117,8 @@ function Inventory() {
                 <th className="font-semibold text-[#777] uppercase text-[13px] px-5 py-4 text-sm tracking-[1.3px]">
                   MODEL NO.
                 </th>
-                <th className="font-semibold uppercase text-[13px] px-5 py-4 text-sm"></th>
-                <th className="font-semibold uppercase text-[13px] px-5 py-4 text-sm"></th>
+                <th className="font-semibold text-[#777] uppercase text-[13px] px-5 py-4 text-sm tracking-[1.3px]">Edit</th>
+                <th className="font-semibold text-[#777] uppercase text-[13px] px-5 py-4 text-sm tracking-[1.3px]">Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -70,6 +130,8 @@ function Inventory() {
         </div>
       </div>
       <AddProduct open={addProductOpen} setOpen={setAddProductOpen} />
+      <AddMultipleProd open={addMultiProductOpen} setOpen={setAddMultiProductOpen} />
+      <AddProductCollections open={addProductCollectionOpen} setOpen={setAddProductCollectionOpen} />
     </SideLayout>
   );
 }
