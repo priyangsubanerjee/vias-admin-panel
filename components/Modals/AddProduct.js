@@ -166,7 +166,7 @@ function AddProduct({ open, setOpen }) {
     let collections = [...collection];
 
     for (let i = 0; i < collections.length; i++) {
-      if (collection.file) {
+      if (collections[i].file) {
         const formData = new FormData();
         formData.append("file", collections[i].file);
         const res = await fetch("/api/cloudinary/upload", {
@@ -174,8 +174,10 @@ function AddProduct({ open, setOpen }) {
           body: formData,
         });
         const { url, id } = await res.json();
+        console.log("Collection file uploaded", url);
         collections[i].image = { url, id };
       } else {
+        console.log("Collection file not present");
         collections[i].image = {
           url: "https://cdn-icons-png.flaticon.com/512/1160/1160358.png",
           id: "placeholder-image_zqjz3r",
@@ -214,7 +216,9 @@ function AddProduct({ open, setOpen }) {
       method: "POST",
       body: JSON.stringify(newProduct),
     });
+
     const { success, message } = await createResponse.json();
+
     if (success) {
       location.reload();
     } else {
@@ -223,6 +227,10 @@ function AddProduct({ open, setOpen }) {
 
     setLoading(false);
   };
+
+  useEffect(() => {
+    console.log(collection);
+  }, [collection]);
 
   return (
     <>
