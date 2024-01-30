@@ -70,6 +70,10 @@ function ProductRow({ product }) {
     }));
   }, [description]);
 
+  useEffect(() => {
+    console.log(collection);
+  }, [collection]);
+
   const handleSave = async () => {
     let collectionPass = true;
     collection.forEach((item) => {
@@ -102,8 +106,6 @@ function ProductRow({ product }) {
     setLoading(true);
 
     let productImages = [...productStaticProp.productImages];
-
-    // upload all product images to cloudinary
 
     for (let i = 0; i < rawImages.length; i++) {
       const formData = new FormData();
@@ -148,10 +150,12 @@ function ProductRow({ product }) {
           const { url, id } = await res.json();
           collections[i].image = { url, id };
         } else {
-          collections[i].image = {
-            url: "https://cdn-icons-png.flaticon.com/512/1160/1160358.png",
-            id: "placeholder-image_zqjz3r",
-          };
+          if (!collections[i].image) {
+            collections[i].image = {
+              url: "https://cdn-icons-png.flaticon.com/512/1160/1160358.png",
+              id: "placeholder-image_zqjz3r",
+            };
+          }
         }
       }
     }
@@ -171,17 +175,17 @@ function ProductRow({ product }) {
       collections:
         collections.length > 0
           ? collections.map((item) => {
-            return {
-              _id: item?._id,
-              name: item?.name,
-              width: item?.width,
-              tag: item?.tag,
-              price: item?.price,
-              discountedPrice: item?.discountedPrice,
-              inStock: item?.inStock,
-              image: item?.image,
-            };
-          })
+              return {
+                _id: item?._id,
+                name: item?.name,
+                width: item?.width,
+                tag: item?.tag,
+                price: item?.price,
+                discountedPrice: item?.discountedPrice,
+                inStock: item?.inStock,
+                image: item?.image,
+              };
+            })
           : [],
     };
 
@@ -201,8 +205,8 @@ function ProductRow({ product }) {
 
   function exportToCSV(data, fileName) {
     const csv = Papa.unparse(data);
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = fileName;
     document.body.appendChild(link);
@@ -220,12 +224,15 @@ function ProductRow({ product }) {
         Price: item?.price,
         DiscountedPrice: item?.discountedPrice,
         InStock: item?.inStock,
-        Image: item.image.url.split('/').pop()
+        Image: item.image.url.split("/").pop(),
       };
       collectionsToExport.push(newCollection);
     });
 
-    await exportToCSV(collectionsToExport, `${productStaticProp.name}_collection_data.csv`);
+    await exportToCSV(
+      collectionsToExport,
+      `${productStaticProp.name}_collection_data.csv`
+    );
   };
 
   return (
@@ -583,14 +590,19 @@ function ProductRow({ product }) {
               </div>
               <div className="mt-20">
                 <div className="text-[#1B1B1B] font-semibold text-[18px] flex justify-between">
-                  <div>
-                    Collection
-                  </div>
-                  {!collection.length > 0 ? "" :
+                  <div>Collection</div>
+                  {!collection.length > 0 ? (
+                    ""
+                  ) : (
                     <div className="flex items-center">
-                      <button className="h-8 bg-[#133365] shrink-0 text-end whitespace-nowrap text-sm px-5 text-white rounded" onClick={handleExportCSV} >Export to CSV</button>
+                      <button
+                        className="h-8 bg-[#133365] shrink-0 text-end whitespace-nowrap text-sm px-5 text-white rounded"
+                        onClick={handleExportCSV}
+                      >
+                        Export to CSV
+                      </button>
                     </div>
-                  }
+                  )}
                 </div>
                 <div className="mt-6 bg-white h-12 flex items-center px-5">
                   <span>
