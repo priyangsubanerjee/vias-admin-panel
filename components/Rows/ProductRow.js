@@ -672,7 +672,7 @@ function ProductRow({ product }) {
                                 className="text-black rounded-md h-10 w-10 flex items-center justify-center"
                               >
                                 {item?.file == null ? (
-                                  item?.image.url ? (
+                                  item?.image?.url ? (
                                     <img
                                       src={item?.image.url}
                                       alt=""

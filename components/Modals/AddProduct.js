@@ -380,6 +380,8 @@ function AddProduct({ open, setOpen }) {
                   </svg>
                   <input
                     type="file"
+                    // accept="image/*"
+                    accept=".jpg, .jpeg, .png"
                     onChange={(e) => {
                       let files = e.target.files;
                       let filesArr = Array.from(files);
@@ -728,6 +730,7 @@ function AddProduct({ open, setOpen }) {
                             <input
                               type="file"
                               hidden
+                              accept=".jpg, .jpeg, .png"
                               onChange={(e) => {
                                 let files = e.target.files;
                                 let filesArr = Array.from(files);
