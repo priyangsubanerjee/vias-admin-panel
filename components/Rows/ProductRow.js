@@ -139,22 +139,28 @@ function ProductRow({ product }) {
 
     if (collection.length > 0) {
       for (let i = 0; i < collections.length; i++) {
-        if (collection[i].file) {
+        if (collection[i].file != null) {
           console.log("uploading image");
           const formData = new FormData();
           formData.append("file", collections[i].file);
-          const res = await fetch("/api/cloudinary/upload", {
-            method: "POST",
-            body: formData,
-          });
-          const { url, id } = await res.json();
-          collections[i].image = { url, id };
+          try {
+            const res = await fetch("/api/cloudinary/upload", {
+              method: "POST",
+              body: formData,
+            });
+            const { url, id } = await res.json();
+            collections[i].image = { url, id };
+          } catch (error) {
+            alert("Error uploading image");
+          }
         } else {
-          if (!collections[i].image) {
+          if (collections[i].image == null) {
             collections[i].image = {
               url: "https://cdn-icons-png.flaticon.com/512/1160/1160358.png",
               id: "placeholder-image_zqjz3r",
             };
+          } else {
+            collections[i].image = collections[i].image;
           }
         }
       }
@@ -419,6 +425,7 @@ function ProductRow({ product }) {
                   </svg>
                   <input
                     type="file"
+                    accept=".jpg, .jpeg, .png"
                     onChange={(e) => {
                       let files = e.target.files;
                       let filesArr = Array.from(files);
@@ -695,6 +702,7 @@ function ProductRow({ product }) {
                               <input
                                 type="file"
                                 hidden
+                                accept=".jpg, .jpeg, .png"
                                 onChange={(e) => {
                                   let files = e.target.files;
                                   let filesArr = Array.from(files);
