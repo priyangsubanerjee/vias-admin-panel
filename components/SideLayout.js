@@ -91,6 +91,20 @@ function SideLayout({ children }) {
               <span className="">Customers</span>
             </li>
           </Link>
+          <Link href={"/door-colors"}>
+            <li
+              style={{
+                background: router.pathname === "/door-colors" && "#023E8A",
+                color: router.pathname === "/door-colors" ? "white" : "black",
+              }}
+              className="flex items-center space-x-4  px-4 py-3 rounded-lg text-sm"
+            >
+              <span>
+                <Icon height={24} icon="ph:door-open-light" />
+              </span>
+              <span className="">Doors</span>
+            </li>
+          </Link>
           <li className="flex items-center space-x-4 bg-[#023E8A]/0 text-black px-4 py-3 rounded-lg text-sm">
             <span className="text-black">
               <svg
