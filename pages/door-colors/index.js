@@ -1,7 +1,14 @@
+/* eslint-disable @next/next/no-img-element */
+import AddDoor from "@/components/Modals/AddDoor";
+import DoorColorRow from "@/components/Rows/DoorColorRow";
 import SideLayout from "@/components/SideLayout";
-import React from "react";
+import GlobalState from "@/context/GlobalStates";
+import React, { useContext } from "react";
 
 function DoorColors() {
+  const { doorColors, refreshDoorColors } = useContext(GlobalState);
+  const [addDoorOpen, setAddDoorOpen] = React.useState(false);
+  console.log(doorColors);
   return (
     <SideLayout>
       <div className="px-6 py-10">
@@ -34,10 +41,10 @@ function DoorColors() {
             />
           </div>
           <button
-            onClick={() => setAddProductOpen(true)}
+            onClick={() => setAddDoorOpen(true)}
             className="h-12 bg-[#133365] shrink-0 whitespace-nowrap text-sm px-5 text-white rounded"
           >
-            + Add a product
+            + Add a door
           </button>
         </div>
         <div className="whitespace-nowrap overflow-x-auto">
@@ -51,24 +58,25 @@ function DoorColors() {
                   COLOR
                 </th>
                 <th className="font-semibold text-[#777] uppercase text-[13px] px-5 py-4 text-sm tracking-[1.3px]">
-                  IAMGE
+                  IMAGE
                 </th>
+                <th className="font-semibold text-[#777] uppercase text-[13px] px-5 py-4 text-sm tracking-[1.3px]"></th>
+                <th className="font-semibold text-[#777] uppercase text-[13px] px-5 py-4 text-sm tracking-[1.3px]"></th>
               </tr>
             </thead>
-            {/* <tbody>
-              <tr className="border-b border-[#cdcdcd]">
-                <td className="font-normal px-5 py-4 text-sm flex items-center space-x-4">
-                  John Jacob
-                </td>
-                <td className="font-normal px-5 py-4 text-sm">
-                  johnjacob@gmail.com
-                </td>
-                <td className="font-normal px-5 py-4 text-sm">24/07/23</td>
-              </tr>
-            </tbody> */}
+            <tbody>
+              {doorColors.map((doorColor, index) => (
+                <DoorColorRow
+                  key={index}
+                  doorColor={doorColor}
+                  refreshDoorColors={refreshDoorColors}
+                />
+              ))}
+            </tbody>
           </table>
         </div>
       </div>
+      <AddDoor addDoorOpen={addDoorOpen} setAddDoorOpen={setAddDoorOpen} />
     </SideLayout>
   );
 }

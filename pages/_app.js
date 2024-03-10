@@ -9,6 +9,7 @@ export default function App({
 }) {
   const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState([]);
+  const [doorColors, setDoorColors] = useState([]);
 
   const refreshOrders = async () => {
     const response = await fetch("/api/orders/");
@@ -22,14 +23,28 @@ export default function App({
     success && setProducts(products);
   };
 
+  const refreshDoorColors = async () => {
+    const response = await fetch("/api/door/get");
+    const { doors, success } = await response.json();
+    success && setDoorColors(doors);
+  };
+
   useEffect(() => {
     refreshOrders();
     refreshProducts();
+    refreshDoorColors();
   }, []);
 
   return (
     <GlobalState.Provider
-      value={{ orders, refreshOrders, products, refreshProducts }}
+      value={{
+        orders,
+        refreshOrders,
+        products,
+        refreshProducts,
+        doorColors,
+        refreshDoorColors,
+      }}
     >
       <SessionProvider session={session}>
         <Component {...pageProps} />

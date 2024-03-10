@@ -14,13 +14,13 @@ function Inventory() {
   const { refreshProducts, products } = useContext(GlobalState);
   const [addProductOpen, setAddProductOpen] = React.useState(false);
   const [addMultiProductOpen, setAddMultiProductOpen] = React.useState(false);
-  const [addProductCollectionOpen, setAddProductCollectionOpen] = React.useState(false);
-
+  const [addProductCollectionOpen, setAddProductCollectionOpen] =
+    React.useState(false);
 
   function exportToCSV(data, fileName) {
     const csv = Papa.unparse(data);
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = fileName;
     document.body.appendChild(link);
@@ -31,11 +31,12 @@ function Inventory() {
   const handleExportCSV = async () => {
     const productsToExport = [];
     products.forEach((product) => {
-
       const newProduct = {
         Name: product.name,
         ModelNumber: product.modelNumber,
-        ProductImages: product.productImages.map(item => item.url.split('/').pop()).join(','),
+        ProductImages: product.productImages
+          .map((item) => item.url.split("/").pop())
+          .join(","),
         Description: product.description,
         Category: product.category,
         Color: product.color,
@@ -51,7 +52,7 @@ function Inventory() {
       productsToExport.push(newProduct);
     });
 
-    await exportToCSV(productsToExport, 'product_data.csv');
+    await exportToCSV(productsToExport, "product_data.csv");
   };
 
   return (
@@ -106,7 +107,12 @@ function Inventory() {
         <div className="whitespace-nowrap overflow-x-auto ">
           <div class="w-[100%] flex items-center mt-3">
             <span class="w-full h-full bg-transparent px-6" />
-            <button className="h-8 bg-[#133365] shrink-0 whitespace-nowrap text-sm px-5 text-white rounded" onClick={handleExportCSV}>Export to CSV</button>
+            <button
+              className="h-8 bg-[#133365] shrink-0 whitespace-nowrap text-sm px-5 text-white rounded"
+              onClick={handleExportCSV}
+            >
+              Export to CSV
+            </button>
           </div>
           <table className="w-fit lg:w-full text-left mt-6 lg:mt-10">
             <thead>
@@ -117,8 +123,12 @@ function Inventory() {
                 <th className="font-semibold text-[#777] uppercase text-[13px] px-5 py-4 text-sm tracking-[1.3px]">
                   MODEL NO.
                 </th>
-                <th className="font-semibold text-[#777] uppercase text-[13px] px-5 py-4 text-sm tracking-[1.3px]">Edit</th>
-                <th className="font-semibold text-[#777] uppercase text-[13px] px-5 py-4 text-sm tracking-[1.3px]">Delete</th>
+                <th className="font-semibold text-[#777] uppercase text-[13px] px-5 py-4 text-sm tracking-[1.3px]">
+                  Edit
+                </th>
+                <th className="font-semibold text-[#777] uppercase text-[13px] px-5 py-4 text-sm tracking-[1.3px]">
+                  Delete
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -130,8 +140,14 @@ function Inventory() {
         </div>
       </div>
       <AddProduct open={addProductOpen} setOpen={setAddProductOpen} />
-      <AddMultipleProd open={addMultiProductOpen} setOpen={setAddMultiProductOpen} />
-      <AddProductCollections open={addProductCollectionOpen} setOpen={setAddProductCollectionOpen} />
+      <AddMultipleProd
+        open={addMultiProductOpen}
+        setOpen={setAddMultiProductOpen}
+      />
+      <AddProductCollections
+        open={addProductCollectionOpen}
+        setOpen={setAddProductCollectionOpen}
+      />
     </SideLayout>
   );
 }
