@@ -3,15 +3,16 @@ import GlobalState from "@/context/GlobalStates";
 import { Icon } from "@iconify/react";
 import React, { useContext, useState } from "react";
 
-function AddDoor({ addDoorOpen, setAddDoorOpen }) {
+function AddDoor({ addDoorOpen, setAddDoorOpen, doorCtx = null }) {
   const { doorColors, refreshDoorColors } = useContext(GlobalState);
   const [loading, setLoading] = React.useState(false);
   const inputRef = React.useRef(null);
 
   const [doorProp, setDoorProp] = useState({
     selectedFile: null,
-    image: "",
-    color: "",
+    image: doorCtx ? doorCtx.image : "",
+    color: doorCtx ? doorCtx.color : "",
+    id: doorCtx ? doorCtx._id : "",
   });
 
   const handleSave = async () => {
@@ -33,30 +34,55 @@ function AddDoor({ addDoorOpen, setAddDoorOpen }) {
       tempUrl = url;
     }
 
-    let createDoor = await fetch("/api/door/create", {
-      method: "POST",
-      body: JSON.stringify({
-        color: doorProp.color,
-        image: tempUrl,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    let createDoorJson = await createDoor.json();
-
-    if (createDoorJson.success) {
-      setAddDoorOpen(false);
-      setDoorProp({
-        selectedFile: null,
-        image: "",
-        color: "",
+    if (doorCtx) {
+      let createDoor = await fetch("/api/door/update", {
+        method: "POST",
+        body: JSON.stringify({
+          color: doorProp.color,
+          image: tempUrl,
+          id: doorProp.id,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
+      createDoor = await createDoor.json();
+      if (createDoor.success) {
+        setAddDoorOpen(false);
+        setDoorProp({
+          selectedFile: null,
+          image: "",
+          color: "",
+          id: "",
+        });
+      }
+      setLoading(false);
+      refreshDoorColors();
+      return;
+    } else {
+      let createDoor = await fetch("/api/door/create", {
+        method: "POST",
+        body: JSON.stringify({
+          color: doorProp.color,
+          image: tempUrl,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      let createDoorJson = await createDoor.json();
+      if (createDoorJson.success) {
+        setAddDoorOpen(false);
+        setDoorProp({
+          selectedFile: null,
+          image: "",
+          color: "",
+          id: "",
+        });
+      }
+      setLoading(false);
+      refreshDoorColors();
     }
-
-    setLoading(false);
-    refreshDoorColors();
   };
 
   const handleClose = () => {
@@ -146,7 +172,7 @@ function AddDoor({ addDoorOpen, setAddDoorOpen }) {
                   name=""
                   id=""
                 />
-                <p className="text-xs leading-6 text-neutral-600 font-medium mt-3">
+                <p className="text-xs leading-6 text-neutral-600 font-medium mt-3 whitespace-normal">
                   This color name will be used to identify the door color in the
                   system.
                 </p>
@@ -157,7 +183,7 @@ function AddDoor({ addDoorOpen, setAddDoorOpen }) {
                 onClick={() => handleSave()}
                 className="bg-[#023E8A] text-white px-5 py-3 text-sm rounded-md"
               >
-                Save product
+                {doorCtx ? "Update" : "Save"}
               </button>
             </div>
           </div>
