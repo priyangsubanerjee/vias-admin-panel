@@ -1,7 +1,24 @@
 /* eslint-disable @next/next/no-img-element */
-import React from "react";
+import GlobalState from "@/context/GlobalStates";
+import React, { useContext } from "react";
 
 function DoorColorRow({ doorColor, refreshDoorColors }) {
+  const handleDelete = async () => {
+    if (window.confirm("Are you sure you want to delete this door color?")) {
+      const deleteDoor = await fetch("/api/door/delete", {
+        method: "POST",
+        body: JSON.stringify({ id: doorColor._id }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const deleteDoorJson = await deleteDoor.json();
+      if (deleteDoorJson.success) {
+        refreshDoorColors();
+      }
+    }
+  };
   return (
     <tr className="border-b border-[#cdcdcd]">
       <td className="font-normal px-5 py-4 text-sm">{doorColor._id}</td>
@@ -18,7 +35,12 @@ function DoorColorRow({ doorColor, refreshDoorColors }) {
         </button>
       </td>
       <td className="font-normal px-5 py-4 text-sm">
-        <button className="h-10 w-10 bg-[#DA3A3A] rounded-md flex items-center justify-center">
+        <button
+          onClick={() => {
+            handleDelete();
+          }}
+          className="h-10 w-10 bg-[#DA3A3A] rounded-md flex items-center justify-center"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
