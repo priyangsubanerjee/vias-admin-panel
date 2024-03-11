@@ -1,11 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import Switch from "react-switch";
 import { collection } from "@/db/models/admin";
 import { v4 as uuidv4 } from "uuid";
+import GlobalState from "@/context/GlobalStates";
 
 function AddProduct({ open, setOpen }) {
+  const { doorColors } = useContext(GlobalState);
   const imageInputRef = React.useRef();
   const descriptionRef = React.useRef();
   const fileInputRef = React.useRef();
@@ -120,6 +122,11 @@ function AddProduct({ open, setOpen }) {
         alert("Please enter a price for each item in the collection");
         return;
       }
+      if (item.doorColor == "") {
+        collectionPass = false;
+        alert("Please enter a color for each item in the collection");
+        return;
+      }
       if (item.discountedPrice == "") {
         collectionPass = false;
         alert(
@@ -204,6 +211,7 @@ function AddProduct({ open, setOpen }) {
           name: item.name,
           width: item.width,
           tag: item.tag,
+          doorColor: item.doorColor,
           price: item.price,
           discountedPrice: item.discountedPrice,
           inStock: item.inStock,
@@ -687,6 +695,9 @@ function AddProduct({ open, setOpen }) {
                         TAG
                       </th>
                       <th className="font-semibold text-[#777] uppercase text-[12px] px-5 py-4 tracking-[1.3px]">
+                        COLOR
+                      </th>
+                      <th className="font-semibold text-[#777] uppercase text-[12px] px-5 py-4 tracking-[1.3px]">
                         TOTAL PRICE
                       </th>
                       <th className="font-semibold text-[#777] uppercase text-[12px] px-5 py-4 tracking-[1.3px]">
@@ -788,6 +799,28 @@ function AddProduct({ open, setOpen }) {
                             <datalist id="tagList">
                               {tagsWithHash.map((item, index) => {
                                 return <option key={index} value={item} />;
+                              })}
+                            </datalist>
+                          </td>
+                          <td className="font-normal px-5 py-4 text-sm">
+                            <input
+                              list="doorColorList"
+                              value={item.doorColor}
+                              className="outline-none w-[100px]"
+                              placeholder="BCL-SK"
+                              onChange={(e) => {
+                                let newCollection = [...collection];
+                                newCollection[index].doorColor = e.target.value;
+                                setCollection(newCollection);
+                              }}
+                              type="text"
+                              name=""
+                            />
+                            <datalist id="doorColorList">
+                              {doorColors.map((item, index) => {
+                                return (
+                                  <option key={index} value={item.color} />
+                                );
                               })}
                             </datalist>
                           </td>

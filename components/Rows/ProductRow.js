@@ -1,11 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import GlobalState from "@/context/GlobalStates";
 import { Icon } from "@iconify/react";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import Switch from "react-switch";
 import Papa from "papaparse";
 
 function ProductRow({ product }) {
+  const { doorColors } = useContext(GlobalState);
   const { refreshProducts } = React.useContext(GlobalState);
   const [loading, setLoading] = React.useState(false);
   const [productStaticProp, setProductStaticProp] = React.useState(
@@ -186,6 +187,7 @@ function ProductRow({ product }) {
                 name: item?.name,
                 width: item?.width,
                 tag: item?.tag,
+                doorColor: item?.doorColor,
                 price: item?.price,
                 discountedPrice: item?.discountedPrice,
                 inStock: item?.inStock,
@@ -651,6 +653,9 @@ function ProductRow({ product }) {
                           TAG
                         </th>
                         <th className="font-semibold text-[#777] uppercase text-[12px] px-5 py-4 tracking-[1.3px]">
+                          COLOR
+                        </th>
+                        <th className="font-semibold text-[#777] uppercase text-[12px] px-5 py-4 tracking-[1.3px]">
                           TOTAL PRICE
                         </th>
                         <th className="font-semibold text-[#777] uppercase text-[12px] px-5 py-4 tracking-[1.3px]">
@@ -760,6 +765,29 @@ function ProductRow({ product }) {
                               <datalist id="tagList">
                                 {tagList.map((item, index) => {
                                   return <option key={index} value={item} />;
+                                })}
+                              </datalist>
+                            </td>
+                            <td className="font-normal px-5 py-4 text-sm">
+                              <input
+                                list="doorColorList"
+                                value={item?.doorColor}
+                                className="outline-none w-[100px]"
+                                placeholder="BCL-SK"
+                                onChange={(e) => {
+                                  let newCollection = [...collection];
+                                  newCollection[index].doorColor =
+                                    e.target.value;
+                                  setCollection(newCollection);
+                                }}
+                                type="text"
+                                name=""
+                              />
+                              <datalist id="doorColorList">
+                                {doorColors.map((item, index) => {
+                                  return (
+                                    <option key={index} value={item.color} />
+                                  );
                                 })}
                               </datalist>
                             </td>
