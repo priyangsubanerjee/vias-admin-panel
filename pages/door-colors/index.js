@@ -12,7 +12,9 @@ function DoorColors() {
   return (
     <SideLayout>
       <div className="px-6 py-10">
-        <h1 className="text-xl font-semibold">4 Door colors</h1>
+        <h1 className="text-xl font-semibold">
+          {doorColors ? doorColors.length : 0} Door colors
+        </h1>
         <div className="flex items-center"></div>
         <div className="flex items-center mt-5 space-x-6">
           <div className="h-12 bg-white rounded px-5 flex items-center w-full">
