@@ -831,6 +831,7 @@ function AddProduct({ open, setOpen }) {
                               className="outline-none w-[100px]"
                               placeholder="100"
                               onChange={(e) => {
+                                if (e.target.value.match(/[^0-9.]/g)) return;
                                 let newCollection = [...collection];
                                 newCollection[index].price = e.target.value;
                                 setCollection(newCollection);
@@ -846,6 +847,8 @@ function AddProduct({ open, setOpen }) {
                               className="outline-none w-[100px]"
                               placeholder="100"
                               onChange={(e) => {
+                                // ignore all non-numeric characters
+                                if (e.target.value.match(/[^0-9.]/g)) return;
                                 let newCollection = [...collection];
                                 newCollection[index].discountedPrice =
                                   e.target.value;
