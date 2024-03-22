@@ -87,10 +87,6 @@ function AddProduct({ open, setOpen }) {
       alert("Please upload at least one image for the product");
       return;
     }
-    if (color == "") {
-      alert("Please enter a color for the product");
-      return;
-    }
     if (doorStyle == "") {
       alert("Please enter a door style for the product");
       return;
@@ -558,7 +554,7 @@ function AddProduct({ open, setOpen }) {
                 Traits
               </h1>
 
-              <div className="mt-10">
+              {/* <div className="mt-10">
                 <div className="flex items-center space-x-2 text-[#555555] font-medium">
                   <Icon icon="ic:twotone-color-lens" />
                   <span className="text-[16px]">Color :</span>
@@ -578,7 +574,7 @@ function AddProduct({ open, setOpen }) {
                     return <option key={index} value={item} />;
                   })}
                 </datalist>
-              </div>
+              </div> */}
 
               <div className="mt-6">
                 <div className="flex items-center space-x-2 text-[#555555] font-medium">
