@@ -48,6 +48,7 @@ export default function App({
     >
       <SessionProvider session={session}>
         {/* <Component {...pageProps} /> */}
+        ERROR 404
       </SessionProvider>
     </GlobalState.Provider>
   );
