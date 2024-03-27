@@ -71,11 +71,17 @@ function ProductRow({ product }) {
     }));
   }, [description]);
 
-  useEffect(() => {
-    console.log(collection);
-  }, [collection]);
-
   const handleSave = async () => {
+    if (productStaticProp.modelNumber.length == "") {
+      alert("Model number cannot be empty");
+      return;
+    }
+
+    if (productStaticProp.name.length == "") {
+      alert("Product name cannot be empty");
+      return;
+    }
+
     let collectionPass = true;
     collection.forEach((item) => {
       if (item?.name == "") {
