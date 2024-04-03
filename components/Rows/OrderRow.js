@@ -3,8 +3,10 @@ import { Icon } from "@iconify/react";
 import React, { useContext } from "react";
 import ShippingStatus from "../Modals/ShippingStatus";
 import GlobalState from "@/context/GlobalStates";
+import OrderSummary from "../Modals/OrderSummary";
 
 function OrderRow({ order, setOrders }) {
+  console.log(order);
   const { refreshOrders } = useContext(GlobalState);
   const returnFormattedDate = () => {
     let date = new Date(order.orderPlaceOn).toDateString();
@@ -13,6 +15,7 @@ function OrderRow({ order, setOrders }) {
   };
 
   const [shippingStatusOpen, setShippingStatusOpen] = React.useState(false);
+  const [orderSummaryOpen, setOrderSummaryOpen] = React.useState(false);
 
   return (
     <>
@@ -29,7 +32,10 @@ function OrderRow({ order, setOrders }) {
         </td>
 
         <td className="font-normal px-5 py-4 text-sm">
-          <button className="h-10 w-10 rounded bg-neutral-200 flex items-center justify-center">
+          <button
+            onClick={() => setOrderSummaryOpen(true)}
+            className="h-10 w-10 rounded bg-neutral-200 flex items-center justify-center"
+          >
             <Icon height={18} icon="fluent:box-16-regular" />
           </button>
         </td>
@@ -48,6 +54,11 @@ function OrderRow({ order, setOrders }) {
         order={order}
         setOpen={setShippingStatusOpen}
         open={shippingStatusOpen}
+      />
+      <OrderSummary
+        order={order}
+        setOpen={setOrderSummaryOpen}
+        open={orderSummaryOpen}
       />
     </>
   );

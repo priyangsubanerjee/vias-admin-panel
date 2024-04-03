@@ -18,15 +18,17 @@ function Orders() {
 
   useEffect(() => {
     if (selectedFilter === "All") {
-      setOrdersProp(orders);
+      setOrdersProp(orders.reverse());
     } else if (selectedFilter === "Success") {
-      setOrdersProp(
-        orders.filter((order) => order.paymentSuccessfull === true)
-      );
+      let orders_ = orders.filter((order) => order.paymentSuccessfull === true);
+      let revrse = orders_.reverse();
+      setOrdersProp(revrse);
     } else if (selectedFilter === "Pending") {
-      setOrdersProp(
-        orders.filter((order) => order.paymentSuccessfull === false)
+      let orders_ = orders.filter(
+        (order) => order.paymentSuccessfull === false
       );
+      let revrse = orders_.reverse();
+      setOrdersProp(revrse);
     }
   }, [orders, selectedFilter]);
 

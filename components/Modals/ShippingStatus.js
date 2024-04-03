@@ -27,6 +27,7 @@ function ShippingStatus({ order, open, setOpen }) {
   const returnFormattedDate = () => {
     let date = new Date(order.shippingStatus.date).toDateString();
     let date2 = new Date(order.shippingStatus.date).toLocaleTimeString();
+    console.log(date, date2);
     return date + " " + date2;
   };
 
