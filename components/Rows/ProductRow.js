@@ -879,6 +879,9 @@ function ProductRow({ product }) {
                           name: "",
                           width: "",
                           tag: "",
+                          doorColor: doorColors
+                            .map((item) => item.color)
+                            .join(","),
                           totalPrice: "",
                           discountedPrice: "",
                           inStock: true,
