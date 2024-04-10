@@ -94,15 +94,31 @@ function ProductRow({ product }) {
         alert("Please enter a width for each item in the collection");
         return;
       }
+
       if (item?.price == "") {
         collectionPass = false;
         alert("Please enter a price for each item in the collection");
         return;
       }
+
+      if (item?.price == 0) {
+        collectionPass = false;
+        alert("Please enter a valid price for each item in the collection");
+        return;
+      }
+
       if (item?.discountedPrice == "") {
         collectionPass = false;
         alert(
           "Please enter a discounted price for each item in the collection"
+        );
+        return;
+      }
+
+      if (item?.discountedPrice == 0) {
+        collectionPass = false;
+        alert(
+          "Please enter a valid discounted price for each item in the collection"
         );
         return;
       }
