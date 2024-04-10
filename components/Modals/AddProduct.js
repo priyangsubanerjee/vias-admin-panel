@@ -29,14 +29,6 @@ function AddProduct({ open, setOpen }) {
 
   const namesList = ["European", "Classic", "Shaker"];
   const doorStyleList = ["Shaker", "Euro", "Classic"];
-  const colorList = [
-    "White",
-    "Light Gray",
-    "Dark Gray",
-    "Blue",
-    "Black",
-    "Espresso",
-  ];
 
   const tagNames = [
     "SC-B",
@@ -891,7 +883,7 @@ function AddProduct({ open, setOpen }) {
               <div className="mt-5">
                 <button
                   onClick={() => {
-                    setCollection((prev) => [
+                    let doorColorsString = setCollection((prev) => [
                       ...prev,
                       {
                         _id: uuidv4(),
@@ -903,6 +895,9 @@ function AddProduct({ open, setOpen }) {
                         name: "",
                         width: "",
                         tag: "",
+                        doorColor: doorColors
+                          .map((item) => item.color)
+                          .join(","),
                         totalPrice: "",
                         discountedPrice: "",
                         inStock: true,
