@@ -145,6 +145,7 @@ function ProductRow({ product }) {
     // console.log(collections);
 
     if (collection.length > 0) {
+      console.log(collection);
       for (let i = 0; i < collections.length; i++) {
         if (collection[i].file != null) {
           console.log("uploading image");
@@ -161,7 +162,7 @@ function ProductRow({ product }) {
             alert("Error uploading image");
           }
         } else {
-          if (collections[i].image == null) {
+          if (collections[i].image == "") {
             collections[i].image = {
               url: "https://cdn-icons-png.flaticon.com/512/1160/1160358.png",
               id: "placeholder-image_zqjz3r",
