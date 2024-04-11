@@ -82,6 +82,11 @@ function ProductRow({ product }) {
       return;
     }
 
+    if (productStaticProp.doorStyle.length == "") {
+      alert("Door style cannot be empty");
+      return;
+    }
+
     let collectionPass = true;
     collection.forEach((item) => {
       if (item?.name == "") {
@@ -546,7 +551,7 @@ function ProductRow({ product }) {
                 Traits
               </h1>
 
-              <div className="mt-10">
+              {/* <div className="mt-10">
                 <div className="flex items-center space-x-2 text-[#555555] font-medium">
                   <Icon icon="ic:twotone-color-lens" />
                   <span className="text-[16px]">Color :</span>
@@ -571,7 +576,7 @@ function ProductRow({ product }) {
                     return <option key={index} value={item} />;
                   })}
                 </datalist>
-              </div>
+              </div> */}
 
               <div className="mt-6">
                 <div className="flex items-center space-x-2 text-[#555555] font-medium">
